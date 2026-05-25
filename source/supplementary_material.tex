@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+
+\title{Supplementary Material for ``Do Selected Neural and Zero-Shot Time-Series Models Beat Persistence in Absolute Stock-Price Forecasting? A Cross-Market Audit''}
+
+\author{Chu-Nuo Tan\\
+Guangzhou Maritime University\\
+Guangzhou, China}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+
+This supplement reports expanded CSV-derived tables for the cross-market baseline-first stock-price forecasting audit. The main paper keeps only compact evidence tables. This document preserves additional model, dataset, and row-level summaries so that the negative conclusion can be inspected without overloading the main manuscript.
+
+\section{Included Artifacts}
+
+The evidence package contains the following generated files:
+\begin{itemize}
+\item \texttt{combined\_model\_results.csv}: unified supervised and Chronos result rows.
+\item \texttt{model\_gate\_summary.csv}: model-level pass rates and RMSE-ratio confidence intervals.
+\item \texttt{model\_horizon\_summary.csv}: horizon-level summaries.
+\item \texttt{dataset\_model\_summary.csv}: dataset-by-model summaries.
+\item \texttt{best\_100\_model\_rows.csv} and \texttt{worst\_100\_model\_rows.csv}: row-level extremes.
+\item \texttt{chronos\_full\_origin\_subset\_60\_rows.csv}: the 60-row full-origin Chronos subset verification cited in the main manuscript.
+\item \texttt{FULL\_ORIGIN\_SUBSET\_SUMMARY.md}: a compact summary of the full-origin subset verification.
+\end{itemize}
+
+\input{crossmarket_supplement_tables}
+
+\section{Split Boundaries}
+
+The main paper uses chronological train/validation/test splits. Table S5 reports nominal split dates computed from the raw downloaded records. Exact model-row sample counts are retained in the evidence package because technical indicators and horizon-specific target shifting slightly change usable row counts.
+
+\input{crossmarket_split_appendix_tables}
+
+\section{Interpretation}
+
+The long-form tables reinforce the main result. Supervised models fail across nearly all dataset and model partitions. Chronos-T5-small is more competitive than the supervised implementations, but its wins are local rather than stable across the complete audit. These results justify the paper's restrained claim: persistence-first evaluation should precede architecture-level conclusions in absolute stock-price level forecasting.
+
+\end{document}

@@ -1,0 +1,6 @@
+dataset,assets,start,end,dataset_label
+dow30,30,2015-01-02,2026-04-30,Dow 30
+etf_basket,12,2015-01-02,2026-04-30,ETF basket
+hang_seng_largecap,43,2015-01-02,2026-04-30,Hang Seng large-cap
+nasdaq_large_tech,30,2015-01-02,2026-04-30,Nasdaq large-tech
+sp100_largecap,50,2015-01-02,2026-04-30,S&P 100 subset

@@ -1,0 +1,54 @@
+\begin{table}[t]
+\centering
+\caption{Cross-market dataset coverage.}
+\label{tab:dataset_coverage}
+\begin{tabular}{lrr}
+\toprule
+Dataset & Assets & Date span \\
+\midrule
+Dow 30 & 30 & 2015-01-02--2026-04-30 \\
+ETF basket & 12 & 2015-01-02--2026-04-30 \\
+Hang Seng large-cap & 43 & 2015-01-02--2026-04-30 \\
+Nasdaq large-tech & 30 & 2015-01-02--2026-04-30 \\
+S\&P 100 subset & 50 & 2015-01-02--2026-04-30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\caption{Persistence-gate results across supervised and zero-shot models. Ratios below 1.0 beat latest-close persistence; values above 1.0 underperform it. Chronos uses the sampled-origin zero-shot protocol, while the other models use the full rolling-origin supervised protocol.}
+\label{tab:model_gate_summary}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & Rows & Passes & Pass rate & Median RMSE ratio & 95\% CI \\
+\midrule
+LSTM & 5940 & 8 & 0.13\% & 2.641 & [2.511, 2.754] \\
+GRU & 5940 & 5 & 0.08\% & 2.221 & [2.144, 2.315] \\
+DLinear & 5940 & 0 & 0.00\% & 3.150 & [3.017, 3.258] \\
+PatchTST-style & 5940 & 3 & 0.05\% & 3.766 & [3.645, 3.899] \\
+iTransformer-style & 5940 & 4 & 0.07\% & 3.723 & [3.612, 3.946] \\
+TimeMixer-style & 5940 & 3 & 0.05\% & 2.328 & [2.288, 2.370] \\
+Chronos-T5-small zero-shot & 990 & 133 & 13.43\% & 1.035 & [1.033, 1.037] \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table}[t]
+\centering
+\caption{Median RMSE ratio by forecast horizon.}
+\label{tab:horizon_summary}
+\begin{tabular}{lrrr}
+\toprule
+Model group & 1-day & 5-day & 10-day \\
+\midrule
+LSTM & 3.189 & 2.436 & 2.303 \\
+GRU & 2.768 & 2.039 & 2.028 \\
+DLinear & 5.412 & 2.733 & 2.132 \\
+PatchTST-style & 5.706 & 3.206 & 2.645 \\
+iTransformer-style & 6.458 & 3.354 & 2.572 \\
+TimeMixer-style & 3.425 & 2.180 & 1.910 \\
+Chronos-T5-small zero-shot & 1.041 & 1.034 & 1.030 \\
+\bottomrule
+\end{tabular}
+\end{table}

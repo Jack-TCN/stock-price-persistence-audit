@@ -1,0 +1,133 @@
+\begin{center}
+\small
+\textbf{Table 1. Protocol-level model summary.}\\[0.5em]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrr}
+\toprule
+Protocol & Model & Rows & Passes & Pass rate & Median ratio \\
+\midrule
+full rolling-origin supervised audit & DLinear & 5940 & 0 & 0.00\% & 3.150 \\
+full rolling-origin supervised audit & GRU & 5940 & 5 & 0.08\% & 2.221 \\
+full rolling-origin supervised audit & LSTM & 5940 & 8 & 0.13\% & 2.641 \\
+full rolling-origin supervised audit & PatchTST-style & 5940 & 3 & 0.05\% & 3.766 \\
+full rolling-origin supervised audit & TimeMixer-style & 5940 & 3 & 0.05\% & 2.328 \\
+full rolling-origin supervised audit & iTransformer-style & 5940 & 4 & 0.07\% & 3.723 \\
+sampled-origin zero-shot foundation audit & Chronos-T5-small zero-shot & 990 & 133 & 13.43\% & 1.035 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\begin{center}
+\small
+\textbf{Table 2. Dataset-by-model persistence-gate summary.}\\[0.5em]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrr}
+\toprule
+Dataset & Model & Rows & Passes & Pass rate & Median ratio \\
+\midrule
+Dow 30 & Chronos-T5-small zero-shot & 180 & 21 & 11.67\% & 1.036 \\
+Dow 30 & DLinear & 1080 & 0 & 0.00\% & 2.671 \\
+Dow 30 & GRU & 1080 & 1 & 0.09\% & 2.390 \\
+Dow 30 & LSTM & 1080 & 2 & 0.19\% & 2.794 \\
+Dow 30 & PatchTST-style & 1080 & 0 & 0.00\% & 4.078 \\
+Dow 30 & TimeMixer-style & 1080 & 0 & 0.00\% & 2.324 \\
+Dow 30 & iTransformer-style & 1080 & 0 & 0.00\% & 4.161 \\
+ETF basket & Chronos-T5-small zero-shot & 72 & 13 & 18.06\% & 1.032 \\
+ETF basket & DLinear & 432 & 0 & 0.00\% & 3.676 \\
+ETF basket & GRU & 432 & 1 & 0.23\% & 4.364 \\
+ETF basket & LSTM & 432 & 0 & 0.00\% & 5.233 \\
+ETF basket & PatchTST-style & 432 & 0 & 0.00\% & 5.553 \\
+ETF basket & TimeMixer-style & 432 & 0 & 0.00\% & 3.039 \\
+ETF basket & iTransformer-style & 432 & 0 & 0.00\% & 6.224 \\
+Hang Seng large-cap & Chronos-T5-small zero-shot & 258 & 40 & 15.50\% & 1.033 \\
+Hang Seng large-cap & DLinear & 1548 & 0 & 0.00\% & 4.747 \\
+Hang Seng large-cap & GRU & 1548 & 2 & 0.13\% & 1.408 \\
+Hang Seng large-cap & LSTM & 1548 & 4 & 0.26\% & 1.639 \\
+Hang Seng large-cap & PatchTST-style & 1548 & 3 & 0.19\% & 2.085 \\
+Hang Seng large-cap & TimeMixer-style & 1548 & 3 & 0.19\% & 1.970 \\
+Hang Seng large-cap & iTransformer-style & 1548 & 4 & 0.26\% & 1.959 \\
+Nasdaq large-tech & Chronos-T5-small zero-shot & 180 & 19 & 10.56\% & 1.035 \\
+Nasdaq large-tech & DLinear & 1080 & 0 & 0.00\% & 2.291 \\
+Nasdaq large-tech & GRU & 1080 & 0 & 0.00\% & 3.996 \\
+Nasdaq large-tech & LSTM & 1080 & 0 & 0.00\% & 4.572 \\
+Nasdaq large-tech & PatchTST-style & 1080 & 0 & 0.00\% & 5.108 \\
+Nasdaq large-tech & TimeMixer-style & 1080 & 0 & 0.00\% & 2.404 \\
+Nasdaq large-tech & iTransformer-style & 1080 & 0 & 0.00\% & 5.364 \\
+S\&P 100 subset & Chronos-T5-small zero-shot & 300 & 40 & 13.33\% & 1.036 \\
+S\&P 100 subset & DLinear & 1800 & 0 & 0.00\% & 3.000 \\
+S\&P 100 subset & GRU & 1800 & 1 & 0.06\% & 2.412 \\
+S\&P 100 subset & LSTM & 1800 & 2 & 0.11\% & 2.868 \\
+S\&P 100 subset & PatchTST-style & 1800 & 0 & 0.00\% & 4.189 \\
+S\&P 100 subset & TimeMixer-style & 1800 & 0 & 0.00\% & 2.359 \\
+S\&P 100 subset & iTransformer-style & 1800 & 0 & 0.00\% & 4.229 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\begin{center}
+\small
+\textbf{Best model rows by RMSE ratio.}\\[0.5em]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllrrr}
+\toprule
+Dataset & Ticker & Model & Horizon & Price & Ratio & Pass \\
+\midrule
+ETF basket & SLV & Chronos-T5-small zero-shot & 10 & raw\_close & 0.916 & 1 \\
+S\&P 100 subset & BK & Chronos-T5-small zero-shot & 10 & raw\_close & 0.922 & 1 \\
+Nasdaq large-tech & AMD & Chronos-T5-small zero-shot & 1 & raw\_close & 0.930 & 1 \\
+Hang Seng large-cap & 0267.HK & PatchTST-style & 10 & raw\_close & 0.939 & 1 \\
+Dow 30 & KO & Chronos-T5-small zero-shot & 5 & adjusted\_close & 0.942 & 1 \\
+Hang Seng large-cap & 0267.HK & Chronos-T5-small zero-shot & 1 & adjusted\_close & 0.947 & 1 \\
+Hang Seng large-cap & 0941.HK & Chronos-T5-small zero-shot & 5 & raw\_close & 0.947 & 1 \\
+Hang Seng large-cap & 3690.HK & Chronos-T5-small zero-shot & 10 & raw\_close & 0.952 & 1 \\
+S\&P 100 subset & GS & Chronos-T5-small zero-shot & 10 & adjusted\_close & 0.955 & 1 \\
+Hang Seng large-cap & 1109.HK & Chronos-T5-small zero-shot & 10 & adjusted\_close & 0.956 & 1 \\
+Hang Seng large-cap & 0267.HK & Chronos-T5-small zero-shot & 1 & raw\_close & 0.956 & 1 \\
+ETF basket & GLD & Chronos-T5-small zero-shot & 10 & adjusted\_close & 0.957 & 1 \\
+Hang Seng large-cap & 0992.HK & Chronos-T5-small zero-shot & 10 & raw\_close & 0.958 & 1 \\
+ETF basket & SLV & Chronos-T5-small zero-shot & 5 & raw\_close & 0.961 & 1 \\
+S\&P 100 subset & GOOG & Chronos-T5-small zero-shot & 5 & raw\_close & 0.961 & 1 \\
+Dow 30 & TRV & Chronos-T5-small zero-shot & 5 & adjusted\_close & 0.963 & 1 \\
+S\&P 100 subset & KO & Chronos-T5-small zero-shot & 1 & adjusted\_close & 0.965 & 1 \\
+Dow 30 & CSCO & Chronos-T5-small zero-shot & 5 & raw\_close & 0.965 & 1 \\
+Hang Seng large-cap & 0005.HK & Chronos-T5-small zero-shot & 10 & adjusted\_close & 0.965 & 1 \\
+S\&P 100 subset & IBM & Chronos-T5-small zero-shot & 5 & raw\_close & 0.967 & 1 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\begin{center}
+\small
+\textbf{Worst model rows by RMSE ratio.}\\[0.5em]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllrrr}
+\toprule
+Dataset & Ticker & Model & Horizon & Price & Ratio & Pass \\
+\midrule
+Hang Seng large-cap & 1044.HK & TimeMixer-style & 1 & raw\_close & 84.389 & 0 \\
+Hang Seng large-cap & 1044.HK & TimeMixer-style & 1 & raw\_close & 74.009 & 0 \\
+Hang Seng large-cap & 1876.HK & DLinear & 1 & raw\_close & 71.852 & 0 \\
+Hang Seng large-cap & 1876.HK & DLinear & 1 & raw\_close & 69.144 & 0 \\
+Hang Seng large-cap & 1044.HK & TimeMixer-style & 1 & raw\_close & 67.975 & 0 \\
+Hang Seng large-cap & 1876.HK & DLinear & 1 & adjusted\_close & 62.649 & 0 \\
+Hang Seng large-cap & 1876.HK & DLinear & 1 & adjusted\_close & 60.096 & 0 \\
+ETF basket & HYG & DLinear & 1 & adjusted\_close & 53.897 & 0 \\
+Hang Seng large-cap & 0003.HK & DLinear & 1 & raw\_close & 52.222 & 0 \\
+Hang Seng large-cap & 1044.HK & TimeMixer-style & 1 & adjusted\_close & 50.238 & 0 \\
+ETF basket & HYG & DLinear & 1 & adjusted\_close & 46.881 & 0 \\
+Hang Seng large-cap & 1876.HK & DLinear & 1 & raw\_close & 46.477 & 0 \\
+Hang Seng large-cap & 1876.HK & DLinear & 1 & adjusted\_close & 41.395 & 0 \\
+Hang Seng large-cap & 1044.HK & TimeMixer-style & 1 & adjusted\_close & 41.256 & 0 \\
+Hang Seng large-cap & 2269.HK & DLinear & 1 & raw\_close & 40.595 & 0 \\
+Hang Seng large-cap & 2269.HK & DLinear & 1 & adjusted\_close & 40.595 & 0 \\
+Hang Seng large-cap & 1044.HK & TimeMixer-style & 1 & adjusted\_close & 40.178 & 0 \\
+S\&P 100 subset & BK & DLinear & 1 & raw\_close & 38.740 & 0 \\
+S\&P 100 subset & BK & DLinear & 1 & raw\_close & 37.917 & 0 \\
+ETF basket & TLT & DLinear & 1 & adjusted\_close & 37.739 & 0 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}

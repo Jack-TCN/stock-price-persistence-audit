@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the archived release DOI once available."
+title: "Do Selected Neural and Zero-Shot Time-Series Models Beat Persistence in Absolute Stock-Price Forecasting? A Cross-Market Audit"
+authors:
+  - family-names: "Jack-TCN"
+repository-code: "https://github.com/Jack-TCN/stock-price-persistence-audit"
+date-released: "2026-05-25"
+version: "v0.1.0"
+license: "MIT"
+

@@ -1,0 +1,6 @@
+dataset,dataset_label,assets,first_date,train_val_boundary,val_test_boundary,last_date,rows
+dow30,Dow 30,30,2015-01-02,2023-02-24,2024-01-23,2026-04-30,2848
+etf_basket,ETF basket,12,2015-01-02,2023-02-24,2024-01-23,2026-04-30,2848
+hang_seng_largecap,Hang Seng large-cap,43,2015-01-02,2023-02-22,2024-01-19,2026-04-30,2788
+nasdaq_large_tech,Nasdaq large-tech,30,2015-01-02,2023-02-24,2024-01-23,2026-04-30,2848
+sp100_largecap,S&P 100 subset,50,2015-01-02,2023-02-24,2024-01-23,2026-04-30,2848
