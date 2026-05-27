@@ -57,5 +57,6 @@ Python package notes are listed in `requirements_submission.txt`. The shell scri
 
 The evidence files in this repository contain derived audit outputs and summary tables. The underlying market data are obtained from public market-data interfaces by ticker and date range; users should respect the terms of the data provider they use when reproducing the audit.
 
-A Zenodo DOI should be minted from a public GitHub release and then cited in the manuscript's Data and Code Availability section.
+The archived release is available through Zenodo:
 
+- Concept DOI: [10.5281/zenodo.20412777](https://doi.org/10.5281/zenodo.20412777)

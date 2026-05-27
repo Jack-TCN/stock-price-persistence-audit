@@ -50,6 +50,8 @@ The package-level checker `verify_results.py` verifies the headline row counts a
 - full-origin Chronos subset rows: 60
 - full-origin Chronos subset passes: 2
 
-## Remaining Formal-Submission Step
+## Archived Release
 
-Before formal journal submission, the code and evidence should be deposited in a persistent public repository, preferably GitHub plus Zenodo DOI. The manuscript's Data and Code Availability section should then be updated with that DOI.
+The public repository has been archived on Zenodo. Use the concept DOI for citation and long-term access:
+
+- https://doi.org/10.5281/zenodo.20412777
