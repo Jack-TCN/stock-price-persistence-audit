@@ -21,12 +21,14 @@ The study audits absolute stock-price level forecasting against latest-close per
 
 ## Source Files
 
-- `source/manuscript.tex`: main manuscript source.
+- `source/main.tex`: main manuscript source.
 - `source/supplementary_material.tex`: supplement source.
-- `source/crossmarket_core_tables.tex`: core manuscript tables.
-- `source/crossmarket_supplement_tables.tex`: expanded supplement tables.
-- `source/crossmarket_split_appendix_tables.tex`: split-boundary appendix tables.
-- `source/figures/cross_market_modern_audit/rmse_ratio_distribution.pdf`: main figure source used by the manuscript.
+- `source/sections/`: manuscript and supplementary section files loaded with `\input`.
+- `source/tables/crossmarket_core_tables.tex`: core manuscript tables.
+- `source/tables/crossmarket_supplement_tables.tex`: expanded supplement tables.
+- `source/tables/crossmarket_split_appendix_tables.tex`: split-boundary appendix tables.
+- `source/figures/Figure1_RMSE_Ratio_Distribution.eps`: EPS figure used by the manuscript.
+- `source/figures/Figure1_RMSE_Ratio_Distribution.pdf` and `.png`: companion figure formats retained for compatibility and preview.
 
 ## Code Files
 

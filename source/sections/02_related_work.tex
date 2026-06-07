@@ -1,0 +1,13 @@
+\section{Related Work}
+
+\subsection{Financial Time-Series Forecasting}
+
+Neural networks and technical indicators have long been used in financial prediction studies. LSTM-based and hybrid deep-learning pipelines are common because they can process sliding windows and nonlinear features \cite{bao2017deep,patel2015trend}. Recent financial deep-learning surveys show the breadth of applications and the continuing difficulty of reliable financial prediction \cite{sezer2020stockreview,ozbayoglu2020financialsurvey}. These studies often emphasize relative performance among learned models. For absolute price-level prediction, however, persistence is not a weak baseline; it is the natural first-order comparator. This baseline-first stance is consistent with the broader finance literature on unstable out-of-sample predictability, where simple historical or persistence-like benchmarks are difficult to improve upon \cite{campbell2008predicting,welch2008comprehensive}.
+
+\subsection{Modern Time-Series Models}
+
+Recent forecasting research has produced architectures that patch, invert, decompose, or mix temporal representations. Deep forecasting surveys summarize the rapid architectural diversification of this area \cite{lim2021survey,benidis2022tutorial}. DLinear challenged the value of large transformer models for long-horizon forecasting \cite{zeng2023transformers}. PatchTST applies patch-based transformer modeling to multivariate time series \cite{nie2023patchtst}. iTransformer inverts the usual tokenization scheme and treats variates as tokens \cite{liu2024itransformer}. TimeMixer uses multiscale mixing to combine decomposed temporal patterns \cite{wang2024timemixer}. These models are relevant because they represent current forecasting practice beyond recurrent networks.
+
+\subsection{Foundation Models for Forecasting}
+
+Chronos casts time-series forecasting as a language-model-like sequence modeling problem over quantized values \cite{ansari2024chronos}. It is part of a broader foundation-model trend that includes decoder-only and general-purpose time-series models such as Lag-Llama, TimesFM, MOMENT, and Moirai \cite{rasul2023lagllama,das2024timesfm,goswami2024moment,woo2024moirai}. Such zero-shot forecasters are attractive for applied finance because they avoid per-asset training. Yet zero-shot convenience does not remove the need for a persistence gate. A foundation model that is broadly competent may still underperform the latest observed close for price-level stock forecasting.

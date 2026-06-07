@@ -1,0 +1,15 @@
+\section{Discussion}
+
+\subsection{Why Persistence Is Hard to Beat}
+
+Absolute price levels contain a strong identity component: the next close is usually close to the current close. A learned model trained with sliding windows must estimate both the level and the small future change. Even when it learns the broad level, small lag or smoothing errors can dominate the RMSE difference against persistence. This explains why visually plausible neural predictions can still fail the gate.
+
+\subsection{What the Negative Result Means}
+
+The result does not show that financial forecasting is impossible. It also does not evaluate return prediction, direction classification, volatility forecasting, ranking, portfolio construction, or trading profitability. The conclusion is narrower and more useful: for absolute stock-price level regression, no-training persistence must be passed before claims about architecture, indicators, or foundation models are credible.
+
+\subsection{Implications for Applied Papers}
+
+Applied stock-prediction papers should report persistence baselines as primary evidence, not as a supplementary sanity check. If a model fails persistence, comparisons among learned models should be presented as engineering diagnostics rather than forecasting usefulness. If a model passes persistence only in selected assets or horizons, the claim should be local and conditional rather than general.
+
+Even these compact implementations capture core architectural motifs that distinguish modern forecasters, including patching, channel-wise attention, and multiscale mixing. Their underperformance reinforces the baseline-first message, although official full-scale reproductions would still be required for model-specific conclusions about the published architectures.

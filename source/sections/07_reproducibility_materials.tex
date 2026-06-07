@@ -1,0 +1,5 @@
+\section{Reproducibility Materials}
+
+The project stores the audit protocol, figure-generation script, raw download summaries, model-level CSV files, and generated evidence tables with the manuscript. The main evidence package contains the combined model-result table, dataset coverage table, model-gate summary, horizon summary, dataset-model summary, best and worst row extracts, and the LaTeX table source used in this paper. This organization is intentional: the main manuscript reports only the compact evidence needed to evaluate the claim, while the CSV artifacts preserve ticker-level, seed-level, feature-set, horizon, and protocol-level details for independent inspection.
+
+The most important reproducibility rule is that the persistence gate is computed on the same chronological labels as each model result. This avoids a common evaluation error in which a neural model is compared against a baseline using a different test window, different normalization, or different label alignment. The code therefore treats the baseline as part of the experimental protocol rather than as a post-hoc descriptive statistic.

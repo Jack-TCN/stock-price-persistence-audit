@@ -1,0 +1,40 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\title{Do Selected Neural and Zero-Shot Time-Series Models Beat Persistence in Absolute Stock-Price Forecasting? A Cross-Market Audit}
+
+\author{Chu-Nuo Tan\\
+
+Guangzhou Maritime University\\
+Guangzhou, China}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Supervised neural and zero-shot time-series forecasting models are increasingly applied to financial price prediction, but many stock-price studies still evaluate models before verifying whether they outperform a no-training persistence rule. This paper presents a cross-market baseline-first audit of absolute stock-price level forecasting. The study evaluates 165 dataset-series memberships, corresponding to 133 unique ticker symbols after cross-index overlaps, from U.S., Hong Kong, and global ETF universes over 2015 to 2026, two price modes, three horizons, and matched chronological train/validation/test splits. The audited models include LSTM, GRU, DLinear, scaled-down PatchTST-style, iTransformer-style, and TimeMixer-style supervised implementations, plus Chronos-T5-small zero-shot forecasting. Other foundation models are discussed but not experimentally evaluated. The primary usefulness gate is latest-close persistence on the same test origins. Across 35,640 supervised neural configuration-seed rows, only 23 beat latest-close persistence. Chronos-T5-small has 133 passes among 990 sampled-origin rows, but direct pass-count comparison is protocol-confounded and its median RMSE ratio remains above persistence at 1.035. The evidence supports a negative but bounded conclusion: for absolute stock-price level regression, compact learned forecasters and one small foundation model should be treated with caution and should not be claimed useful without first clearing a persistence gate. The paper contributes a reproducible baseline-first audit protocol and shows how positive model-comparison claims can disappear once persistence is treated as the primary benchmark rather than an afterthought.
+\end{abstract}
+
+\noindent\textbf{Keywords:} stock forecasting; persistence baseline; time-series foundation models; Chronos; PatchTST; iTransformer; TimeMixer; negative results
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_audit_protocol}
+\input{sections/04_results}
+\input{sections/05_discussion}
+\input{sections/06_limitations}
+\input{sections/07_reproducibility_materials}
+\input{sections/08_data_and_code_availability}
+\input{sections/09_conclusion}
+\input{sections/10_references}
+
+\end{document}

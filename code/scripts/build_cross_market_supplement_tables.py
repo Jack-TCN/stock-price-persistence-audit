@@ -5,9 +5,11 @@ from pathlib import Path
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = PROJECT_ROOT / "review-stage" / "cross_market_modern_audit" / "evidence_package"
-OUT = PROJECT_ROOT / "crossmarket_supplement_tables.tex"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+EVIDENCE = PROJECT_ROOT / "evidence_package"
+if not EVIDENCE.exists():
+    EVIDENCE = PROJECT_ROOT / "review-stage" / "cross_market_modern_audit" / "evidence_package"
+OUT = PROJECT_ROOT / "source" / "tables" / "crossmarket_supplement_tables.tex"
 
 
 def esc(value: object) -> str:
@@ -91,6 +93,7 @@ def main() -> None:
         lines.append(r"\end{center}")
         lines.append("")
 
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(lines), encoding="utf-8")
     print(OUT)
 

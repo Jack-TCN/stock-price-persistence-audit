@@ -23,7 +23,7 @@ The manuscript therefore presents a negative, baseline-first audit rather than a
 
 - `manuscript/`: compiled manuscript PDF.
 - `supplement/`: compiled supplementary-material PDF.
-- `source/`: LaTeX source, generated table files, and figure assets.
+- `source/`: reorganized LaTeX source. `source/main.tex` inputs manuscript sections from `source/sections/`, generated tables from `source/tables/`, and renamed figure assets from `source/figures/`.
 - `evidence_package/`: CSV and markdown artifacts supporting the paper's headline claims.
 - `code/scripts/`: scripts used for data audit, supervised model audit, Chronos audit, evidence-table generation, figure generation, and supplement-table generation.
 - `verify_results.py`: package-level consistency checker for the headline counts.
@@ -52,6 +52,8 @@ Expected summary:
 The supplied CSV artifacts are sufficient to verify the paper's reported counts and summary claims. Re-running the full experimental pipeline requires market-data access and GPU/CPU resources suitable for repeated rolling-origin model evaluation.
 
 Python package notes are listed in `requirements_submission.txt`. The shell script `run_all_reproduce.sh` documents the intended high-level reproduction order.
+
+For manuscript editing in Overleaf, upload `source/` and compile `main.tex`. The supplementary material source is `source/supplementary_material.tex`.
 
 ## Data and Code Availability
 

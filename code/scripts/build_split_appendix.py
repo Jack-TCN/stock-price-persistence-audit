@@ -5,10 +5,12 @@ from pathlib import Path
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_RUN = PROJECT_ROOT / "review-stage" / "cross_market_modern_audit" / "cross_market_local_20260513_2255"
-EVIDENCE = PROJECT_ROOT / "review-stage" / "cross_market_modern_audit" / "evidence_package"
-OUT_TEX = PROJECT_ROOT / "crossmarket_split_appendix_tables.tex"
+EVIDENCE = PROJECT_ROOT / "evidence_package"
+if not EVIDENCE.exists():
+    EVIDENCE = PROJECT_ROOT / "review-stage" / "cross_market_modern_audit" / "evidence_package"
+OUT_TEX = PROJECT_ROOT / "source" / "tables" / "crossmarket_split_appendix_tables.tex"
 
 DATASET_LABELS = {
     "dow30": "Dow 30",
@@ -94,6 +96,7 @@ def main() -> None:
         "",
         r"\noindent Exact split indices can vary slightly after indicator construction and horizon-specific target shifting. The CSV file \texttt{split\_boundary\_summary.csv} records the raw-download nominal split boundaries, while model-result CSV files record train, validation, and test sample counts for each row.",
     ]
+    OUT_TEX.parent.mkdir(parents=True, exist_ok=True)
     OUT_TEX.write_text("\n".join(lines), encoding="utf-8")
     print(OUT_TEX)
 

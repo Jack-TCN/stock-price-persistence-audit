@@ -8,13 +8,16 @@ import pandas as pd
 from scipy import stats
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 AUDIT_ROOT = PROJECT_ROOT / "review-stage" / "cross_market_modern_audit"
 DATA_RUN = AUDIT_ROOT / "cross_market_local_20260513_2255"
 STAGE2 = AUDIT_ROOT / "model_runs" / "models_stage2_20260514_093210"
 STAGE3 = AUDIT_ROOT / "model_runs" / "models_stage3_modern_20260514_205937"
 CHRONOS = AUDIT_ROOT / "model_runs" / "chronos_zero_shot_20260515_155918"
-OUT = AUDIT_ROOT / "evidence_package"
+OUT = PROJECT_ROOT / "evidence_package"
+if not OUT.exists():
+    OUT = AUDIT_ROOT / "evidence_package"
+SOURCE_TABLE_DIR = PROJECT_ROOT / "source" / "tables"
 
 
 MODEL_LABELS = {
@@ -238,7 +241,10 @@ def write_latex_tables(dataset_summary: pd.DataFrame, model_summary: pd.DataFram
     lines.append(r"\end{table}")
     lines.append("")
 
-    (OUT / "core_tables.tex").write_text("\n".join(lines), encoding="utf-8")
+    core_table = "\n".join(lines)
+    (OUT / "core_tables.tex").write_text(core_table, encoding="utf-8")
+    SOURCE_TABLE_DIR.mkdir(parents=True, exist_ok=True)
+    (SOURCE_TABLE_DIR / "crossmarket_core_tables.tex").write_text(core_table, encoding="utf-8")
 
 
 def write_summary_md(model_summary: pd.DataFrame, dataset_model_summary: pd.DataFrame) -> None:

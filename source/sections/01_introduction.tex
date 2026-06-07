@@ -1,0 +1,20 @@
+\section{Introduction}
+
+Stock-price forecasting remains a common applied machine-learning problem. A typical study gathers daily OHLCV data, adds technical indicators, trains a neural network, and reports RMSE, MAE, or MAPE on a held-out period. More recent versions of this workflow replace recurrent networks with transformer-based or foundation-style time-series models. However, a central evaluation problem remains: absolute stock prices are highly persistent. If the target is the future price level, the no-training rule that the future close equals the latest observed close is often extremely hard to beat.
+
+This observation changes the order of evidence required for a credible paper. Before asking whether one architecture is better than another, the first question is whether any learned model adds value beyond latest-close persistence on the same chronological test labels. If the answer is no, then claims about feature engineering, architectural novelty, or model sophistication are not supported for this target.
+
+The original version of this project was a conventional applied stock-prediction study using LSTM/GRU models and technical indicators. Expanded audit experiments invalidated that positive framing. The current paper therefore reframes the work as a baseline-first diagnostic audit:
+
+\begin{quote}
+Do selected supervised and zero-shot time-series models reliably beat latest-close persistence in absolute stock-price level forecasting?
+\end{quote}
+
+Under the audited protocol, the answer is largely negative. Supervised neural models almost never clear the persistence gate. Chronos-T5-small zero-shot forecasting produces more local wins, especially at longer horizons, but remains slightly worse than persistence in median RMSE ratio. This is a stronger and more honest contribution than claiming a fragile positive result from a narrow model comparison.
+
+The paper makes three contributions:
+\begin{itemize}
+\item It defines a cross-market baseline-first protocol for absolute stock-price forecasting, using matched chronological evaluation and a mandatory persistence gate.
+\item It audits recurrent, linear, transformer-style, multiscale, and zero-shot foundation-model forecasters across 165 dataset-series memberships, two price modes, and three horizons.
+\item It reports a negative result that is useful for applied researchers: architecture comparisons should be interpreted only after a model beats no-training persistence.
+\end{itemize}

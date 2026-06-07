@@ -1,0 +1,3 @@
+\section{Conclusion}
+
+This paper audits whether compact modern time-series forecasters and Chronos-T5-small beat latest-close persistence in cross-market stock-price level prediction. The answer is mostly no under the audited protocol. Supervised neural models almost never pass the persistence gate, and Chronos-T5-small zero-shot forecasting, while locally competitive, remains slightly worse than persistence in median RMSE ratio. The main contribution is therefore methodological: baseline-first evaluation prevents weak positive claims from surviving merely because a learned model looks sophisticated or beats another learned model. For absolute stock-price forecasting, persistence is not optional background; it is the first gate.
