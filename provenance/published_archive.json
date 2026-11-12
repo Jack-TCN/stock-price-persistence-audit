@@ -1,0 +1,13 @@
+{
+  "doi": "10.5281/zenodo.24168592",
+  "conceptdoi": "10.5281/zenodo.20412777",
+  "version": "v0.2.1",
+  "published": true,
+  "archive_bytes": 494430714,
+  "archive_md5": "d9b9e13a028ddd9b0db5dddd3110809b",
+  "archive_sha256": "cf2acf37a56bac4ee01f1862bcd49aa5ae556be2605e51914241c70bb470eeb3",
+  "archive_root": "Jack-TCN-stock-price-persistence-audit-b99bb08/",
+  "all_manifest_files_verified": 136,
+  "manifest_matches_pushed_scientific_commit": true,
+  "scientific_commit": "b99bb08870ac591f21625f7c4e1a6f9297e155b8"
+}

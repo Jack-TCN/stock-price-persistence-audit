@@ -1,10 +1,10 @@
 cff-version: 1.2.0
-message: "Cite the version-specific Zenodo DOI when available; the concept DOI below identifies all versions."
+message: "Cite this fixed corrected-release DOI. The concept DOI 10.5281/zenodo.20412777 identifies all versions."
 title: "Do neural and zero-shot models beat persistence in stock price forecasting? A cross-market study"
 authors:
   - family-names: "Jack-TCN"
 repository-code: "https://github.com/Jack-TCN/stock-price-persistence-audit"
-doi: "10.5281/zenodo.20412777"
-date-released: "2026-11-13"
+doi: "10.5281/zenodo.24168592"
+date-released: "2026-11-12"
 version: "v0.2.1"
 license: "MIT"

@@ -4,6 +4,8 @@
 
 This is the corrected aligned/purged evaluation. It supersedes the old v0.1.2 evidence, which remains accessible in Git history, its release tag, and Zenodo version DOI [10.5281/zenodo.20412970](https://doi.org/10.5281/zenodo.20412970). The stable concept DOI is [10.5281/zenodo.20412777](https://doi.org/10.5281/zenodo.20412777); it resolves to the latest published Zenodo version. Prefer the version-specific DOI for a fixed citation.
 
+**Fixed corrected archive:** [10.5281/zenodo.24168592](https://doi.org/10.5281/zenodo.24168592) (v0.2.1).
+
 ## Packaging correction
 
 Packaging erratum, v0.2.1: the v0.2.0 manifest recorded Windows working-tree line endings for two unchanged pre-existing files (LICENSE and evidence_package/dataset_coverage.csv), while GitHub archived their existing LF Git blobs. This made the default verifier correctly fail closed. v0.2.1 aligns those two manifest hashes with the archived bytes. All experiment result files, exact input snapshot, forecast archives, training sources and reported scientific values are unchanged. v0.2.0 is retained for provenance. Both the working tree and staged Git blobs are now checked before publication.
@@ -50,6 +52,6 @@ This is a long-running full experiment; the saved-evidence commands above do not
 - `data/input_snapshot.zip`, `data/forecast_traces/*.zip`: exact source inputs and all dated forecast CSVs, split into manageable archives.
 - `MANIFEST_SHA256.txt`: public-package file hashes; `RELEASE_NOTES.txt`: corrections and limitations.
 
-The bundled manuscript is the 12 November pre-publication draft. Its availability paragraph describes the local state at that time; the live manuscript and main branch receive the confirmed release link after publication. The immutable scientific code, inputs, and results of v0.2.1 are not changed by that later citation update.
+The immutable v0.2.1 archive contains the 12 November pre-publication manuscript draft. This main-branch citation update includes the live manuscript compiled after archive publication and cites the fixed DOI above. Scientific code, input snapshot, result tables and forecast archives are byte-identical to the tagged v0.2.1 scientific release. Only availability/citation text, PDFs and their provenance/hash entries change after publication.
 
 The repository and Zenodo archive are versioned scientific artifacts, not investment advice. See `DATA_NOTICE.md` for data-origin and licensing scope.
