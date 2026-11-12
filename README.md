@@ -1,8 +1,12 @@
-# Stock-price persistence audit — corrected v0.2.0
+# Stock-price persistence audit — corrected v0.2.1
 
 **Do neural and zero-shot models beat persistence in stock price forecasting? A cross-market study**
 
 This is the corrected aligned/purged evaluation. It supersedes the old v0.1.2 evidence, which remains accessible in Git history, its release tag, and Zenodo version DOI [10.5281/zenodo.20412970](https://doi.org/10.5281/zenodo.20412970). The stable concept DOI is [10.5281/zenodo.20412777](https://doi.org/10.5281/zenodo.20412777); it resolves to the latest published Zenodo version. Prefer the version-specific DOI for a fixed citation.
+
+## Packaging correction
+
+Packaging erratum, v0.2.1: the v0.2.0 manifest recorded Windows working-tree line endings for two unchanged pre-existing files (LICENSE and evidence_package/dataset_coverage.csv), while GitHub archived their existing LF Git blobs. This made the default verifier correctly fail closed. v0.2.1 aligns those two manifest hashes with the archived bytes. All experiment result files, exact input snapshot, forecast archives, training sources and reported scientific values are unchanged. v0.2.0 is retained for provenance. Both the working tree and staged Git blobs are now checked before publication.
 
 ## Corrected results
 
@@ -46,6 +50,6 @@ This is a long-running full experiment; the saved-evidence commands above do not
 - `data/input_snapshot.zip`, `data/forecast_traces/*.zip`: exact source inputs and all dated forecast CSVs, split into manageable archives.
 - `MANIFEST_SHA256.txt`: public-package file hashes; `RELEASE_NOTES.txt`: corrections and limitations.
 
-The bundled manuscript is the 12 November pre-publication draft. Its availability paragraph describes the local state at that time; the live manuscript and main branch receive the confirmed release link after publication. The immutable scientific code, inputs, and results of v0.2.0 are not changed by that later citation update.
+The bundled manuscript is the 12 November pre-publication draft. Its availability paragraph describes the local state at that time; the live manuscript and main branch receive the confirmed release link after publication. The immutable scientific code, inputs, and results of v0.2.1 are not changed by that later citation update.
 
 The repository and Zenodo archive are versioned scientific artifacts, not investment advice. See `DATA_NOTICE.md` for data-origin and licensing scope.

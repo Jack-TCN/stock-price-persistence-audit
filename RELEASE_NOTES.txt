@@ -1,4 +1,6 @@
-v0.2.0 — corrected aligned/purged evaluation
+Packaging erratum, v0.2.1: the v0.2.0 manifest recorded Windows working-tree line endings for two unchanged pre-existing files (LICENSE and evidence_package/dataset_coverage.csv), while GitHub archived their existing LF Git blobs. This made the default verifier correctly fail closed. v0.2.1 aligns those two manifest hashes with the archived bytes. All experiment result files, exact input snapshot, forecast archives, training sources and reported scientific values are unchanged. v0.2.0 is retained for provenance. Both the working tree and staged Git blobs are now checked before publication.
+
+v0.2.1 — corrected aligned/purged evaluation
 
 This release supersedes the evidence in v0.1.2 without erasing it.
 The original technical-feature branch compared 990 conditions (17,820 supervised rows) with baseline errors from different test dates. The corrected batch computes persistence on each model's own test origins, purges labels across train/validation/test boundaries, and retains dated predictions and provenance.

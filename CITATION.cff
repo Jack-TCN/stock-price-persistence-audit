@@ -6,5 +6,5 @@ authors:
 repository-code: "https://github.com/Jack-TCN/stock-price-persistence-audit"
 doi: "10.5281/zenodo.20412777"
 date-released: "2026-11-13"
-version: "v0.2.0"
+version: "v0.2.1"
 license: "MIT"

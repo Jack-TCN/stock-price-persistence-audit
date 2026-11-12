@@ -1,0 +1,22 @@
+{
+  "issue": "Legacy unchanged files had CRLF working-tree bytes but LF Git-index blobs.",
+  "affected_version": "v0.2.0",
+  "fixed_version": "v0.2.1",
+  "old_version_doi": "10.5281/zenodo.24168351",
+  "affected_files": [
+    {
+      "file": "evidence_package/dataset_coverage.csv",
+      "archive_sha256": "6ad30824ba918626ada31281937637d2dfb12da7e4d9e4dee97fab69a03c41fe",
+      "manifest_sha256": "3555d70e48e9ff3e08bc68f4d7837d3c7b672036128fee45c1b3634c91ccde38",
+      "only_crlf_difference": true
+    },
+    {
+      "file": "LICENSE",
+      "archive_sha256": "9f52091769d3b3770fc116b569653da75da6296fa6ef9ec835354301a0a8946c",
+      "manifest_sha256": "8d4547c4e2f9ed03003a7082617c0cc9c1f42d5d14f0c489f5fb6e3c8978e4bb",
+      "only_crlf_difference": true
+    }
+  ],
+  "scientific_inputs_results_forecasts_training_sources_changed": false,
+  "repair": "Keep existing archived LF bytes for the two legacy files and regenerate manifest. Verify each staged Git blob against the working-tree bytes before publishing."
+}
