@@ -1,0 +1,293 @@
+{
+  "source_sha256": "7c302bf86d82e515589f3f63a2a6226eb25d372b1e69cc2d373d40f158bcf6af",
+  "helper_sha256": "aa92620943285b6b4235b3c7d57282a6d1ede9b53112f95507c80a6f9fa56b51",
+  "input_sha256": {
+    "dow30/MMM": "fdb668a8678098d5445acbe39c33ab3d1cf3a3d8471daee985efc8201621d81f",
+    "dow30/AXP": "0e36efbef5136adec6739391d02c899664aa06c6c4b289c2311eb7129e8646f3"
+  },
+  "arguments": {
+    "seed": 42,
+    "model_revision": "a971ba21945c4f1796b17a91fe69214b5f4ad472",
+    "data_run": "data/input_snapshot",
+    "out_dir": "runs\\chronos_full_dow30",
+    "datasets": [
+      "dow30"
+    ],
+    "price_modes": [
+      "raw_close",
+      "adjusted_close"
+    ],
+    "horizons": [
+      1,
+      5,
+      10
+    ],
+    "model_id": "amazon/chronos-t5-small",
+    "model_type": "chronos-t5-small-full-origin-subset",
+    "context_length": 512,
+    "max_origins": 10000,
+    "num_samples": 20,
+    "batch_size": 16,
+    "device": "auto",
+    "limit_assets": 2
+  },
+  "protocol": {
+    "paper_title": "Do Modern Time-Series Models Beat Persistence in Stock-Price Forecasting? A Cross-Market Baseline-First Audit",
+    "version": "2026-05-13-cross-market-v1",
+    "framing": "Cross-market baseline-first diagnostic audit of absolute stock-price forecasting models, including recurrent, modern time-series, and foundation-model families.",
+    "date_range": {
+      "start": "2015-01-01",
+      "end": "2026-05-01"
+    },
+    "split_ratios": {
+      "train": 0.72,
+      "validation": 0.08,
+      "test": 0.2
+    },
+    "price_modes": [
+      "raw_close",
+      "adjusted_close"
+    ],
+    "horizons": [
+      1,
+      5,
+      10
+    ],
+    "datasets": {
+      "dow30": {
+        "market": "United States",
+        "role": "original full-audit universe",
+        "tickers": [
+          "MMM",
+          "AXP",
+          "AMGN",
+          "AMZN",
+          "AAPL",
+          "BA",
+          "CAT",
+          "CVX",
+          "CSCO",
+          "KO",
+          "DIS",
+          "GS",
+          "HD",
+          "HON",
+          "IBM",
+          "JNJ",
+          "JPM",
+          "MCD",
+          "MRK",
+          "MSFT",
+          "NKE",
+          "NVDA",
+          "PG",
+          "CRM",
+          "SHW",
+          "TRV",
+          "UNH",
+          "VZ",
+          "V",
+          "WMT"
+        ]
+      },
+      "nasdaq_large_tech": {
+        "market": "United States",
+        "role": "technology-heavy robustness universe",
+        "tickers": [
+          "AAPL",
+          "MSFT",
+          "NVDA",
+          "AMZN",
+          "GOOGL",
+          "GOOG",
+          "META",
+          "AVGO",
+          "TSLA",
+          "COST",
+          "NFLX",
+          "ADBE",
+          "AMD",
+          "PEP",
+          "CSCO",
+          "TMUS",
+          "INTU",
+          "QCOM",
+          "TXN",
+          "AMAT",
+          "ISRG",
+          "BKNG",
+          "AMGN",
+          "HON",
+          "SBUX",
+          "GILD",
+          "MU",
+          "ADI",
+          "LRCX",
+          "PANW"
+        ]
+      },
+      "sp100_largecap": {
+        "market": "United States",
+        "role": "broad U.S. large-cap robustness universe",
+        "tickers": [
+          "AAPL",
+          "ABBV",
+          "ABT",
+          "ACN",
+          "ADBE",
+          "AIG",
+          "AMD",
+          "AMGN",
+          "AMT",
+          "AMZN",
+          "AVGO",
+          "AXP",
+          "BA",
+          "BAC",
+          "BK",
+          "BKNG",
+          "BLK",
+          "BMY",
+          "BRK-B",
+          "C",
+          "CAT",
+          "CHTR",
+          "CL",
+          "CMCSA",
+          "COF",
+          "COP",
+          "COST",
+          "CRM",
+          "CSCO",
+          "CVS",
+          "CVX",
+          "DHR",
+          "DIS",
+          "DUK",
+          "EMR",
+          "FDX",
+          "GD",
+          "GE",
+          "GILD",
+          "GM",
+          "GOOG",
+          "GOOGL",
+          "GS",
+          "HD",
+          "HON",
+          "IBM",
+          "INTC",
+          "JNJ",
+          "JPM",
+          "KO"
+        ]
+      },
+      "hang_seng_largecap": {
+        "market": "Hong Kong",
+        "role": "Hong Kong cross-market robustness universe",
+        "tickers": [
+          "0001.HK",
+          "0002.HK",
+          "0003.HK",
+          "0005.HK",
+          "0011.HK",
+          "0012.HK",
+          "0016.HK",
+          "0027.HK",
+          "0066.HK",
+          "0175.HK",
+          "0267.HK",
+          "0288.HK",
+          "0386.HK",
+          "0388.HK",
+          "0669.HK",
+          "0700.HK",
+          "0762.HK",
+          "0823.HK",
+          "0883.HK",
+          "0939.HK",
+          "0941.HK",
+          "0968.HK",
+          "0981.HK",
+          "0992.HK",
+          "1038.HK",
+          "1044.HK",
+          "1093.HK",
+          "1109.HK",
+          "1113.HK",
+          "1211.HK",
+          "1299.HK",
+          "1810.HK",
+          "1876.HK",
+          "2020.HK",
+          "2269.HK",
+          "2318.HK",
+          "2382.HK",
+          "2388.HK",
+          "3690.HK",
+          "3968.HK",
+          "3988.HK",
+          "9618.HK",
+          "9988.HK",
+          "9999.HK"
+        ]
+      },
+      "etf_basket": {
+        "market": "Global ETFs",
+        "role": "asset-class sanity-check universe",
+        "tickers": [
+          "SPY",
+          "QQQ",
+          "DIA",
+          "IWM",
+          "VTI",
+          "EFA",
+          "EEM",
+          "FXI",
+          "GLD",
+          "SLV",
+          "TLT",
+          "HYG"
+        ]
+      }
+    },
+    "model_families": {
+      "legacy_applied": [
+        "LSTM",
+        "GRU"
+      ],
+      "modern_supervised": [
+        "DLinear",
+        "PatchTST",
+        "iTransformer",
+        "TimeMixer"
+      ],
+      "foundation_zero_shot": [
+        "TimesFM",
+        "Chronos"
+      ]
+    },
+    "main_reporting_policy": {
+      "primary_gate": "latest-close persistence on matched chronological test labels",
+      "main_pdf": "dataset summary, persistence-gate pass-rate table, one compact distribution figure",
+      "supplement": "full ticker-level, seed-level, feature-set, horizon, and model-family CSV-derived tables"
+    }
+  },
+  "python": "3.13.3",
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "chronos-forecasting": "2.3.2",
+    "transformers": "5.22.2",
+    "huggingface-hub": "2.4.0"
+  },
+  "publication_copy": {
+    "original_manifest_sha256": "80e938d9ec1d9eb66edef959e30211e3a0e11b2d6beb6972686de032f703a6a3",
+    "path_fields_redacted": true,
+    "original_config_and_input_hashes_preserved": true,
+    "resume_policy": "Start a NEW output directory for training; do not resume the published evidence run."
+  }
+}

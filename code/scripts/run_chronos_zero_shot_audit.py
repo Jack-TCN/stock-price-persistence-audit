@@ -4,6 +4,11 @@ import argparse
 import csv
 import itertools
 import json
+import hashlib
+import random
+import platform
+import importlib.metadata
+import time
 import math
 import sys
 from datetime import datetime
@@ -60,6 +65,9 @@ def metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, float]:
 
 def make_eval_frame(raw_df: pd.DataFrame, price_mode: str, horizon: int) -> pd.DataFrame:
     df = raw_df.copy()
+    dates = pd.to_datetime(df['Date'])
+    if dates.isna().any() or dates.duplicated().any() or not dates.is_monotonic_increasing:
+        raise ValueError('Input dates must be valid, unique and increasing')
     if price_mode == "adjusted_close":
         df = adjusted_ohlcv(df)
     elif price_mode != "raw_close":
@@ -71,6 +79,7 @@ def make_eval_frame(raw_df: pd.DataFrame, price_mode: str, horizon: int) -> pd.D
         }
     )
     out["Target"] = out["Close"].shift(-int(horizon))
+    out['TargetDate'] = out['Date'].shift(-int(horizon))
     out = out.replace([np.inf, -np.inf], np.nan).dropna().reset_index(drop=True)
     if len(out) < 300:
         raise ValueError(f"Too few usable rows: {len(out)}")
@@ -119,6 +128,10 @@ def evaluate_asset(pipe, frame: pd.DataFrame, origins: np.ndarray, horizon: int,
     y_true_arr = np.asarray(y_true, dtype=float)
     latest_arr = np.asarray(latest, dtype=float)
 
+    if getattr(args, "prediction_path", None):
+        args.prediction_path.parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame({"origin_date": frame["Date"].iloc[origins].to_numpy(), "target_date": frame['TargetDate'].iloc[origins].to_numpy(), "target": y_true_arr,
+                      "prediction": y_pred, "persistence": latest_arr}).to_csv(args.prediction_path, index=False)
     model_m = metrics(y_true_arr, y_pred)
     latest_m = metrics(y_true_arr, latest_arr)
     return {
@@ -137,6 +150,8 @@ def evaluate_asset(pipe, frame: pd.DataFrame, origins: np.ndarray, horizon: int,
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run a Chronos zero-shot persistence-gate audit.")
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument('--model-revision', required=True, help='Immutable Hugging Face model commit SHA')
     parser.add_argument("--data-run", type=Path, default=DEFAULT_DATA_RUN)
     parser.add_argument("--out-dir", type=Path, default=None)
     parser.add_argument("--datasets", nargs="*", default=None)
@@ -167,12 +182,13 @@ def main() -> None:
 
     from chronos import ChronosPipeline
 
-    device = "cuda" if args.device == "auto" and torch.cuda.is_available() else args.device
+    device = ("cuda" if torch.cuda.is_available() else "cpu") if args.device == "auto" else args.device
     if args.device == "auto" and device == "cuda":
         torch_dtype = torch.bfloat16
     else:
         torch_dtype = torch.float32
-    pipe = ChronosPipeline.from_pretrained(args.model_id, device_map=device, torch_dtype=torch_dtype)
+    if len(args.model_revision) != 40 or any(c not in '0123456789abcdef' for c in args.model_revision):
+        raise ValueError('An immutable 40-character model commit is required')
 
     protocol = json.loads((data_run / "protocol_snapshot.json").read_text(encoding="utf-8"))
     split_ratios = protocol["split_ratios"]
@@ -181,7 +197,22 @@ def main() -> None:
         summary = summary[summary["dataset"].isin(args.datasets)].copy()
     if args.limit_assets:
         summary = summary.head(int(args.limit_assets)).copy()
+    if summary.empty or summary.duplicated(['dataset','ticker']).any():
+        raise ValueError('Empty or duplicate asset selection')
 
+    manifest = out_dir / "run_manifest.json"
+    signature = {"source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                 "helper_sha256": hashlib.sha256(Path(__file__).with_name('run_cross_market_model_audit.py').read_bytes()).hexdigest(),
+                 "input_sha256": {f"{r.dataset}/{r.ticker}": hashlib.sha256(resolve_raw_path(project_root,data_run,r.raw_file).read_bytes()).hexdigest() for r in summary.itertuples()},
+                 "arguments": {k: str(v) if isinstance(v, Path) else v for k,v in vars(args).items()}, "protocol": protocol,
+                 "python": platform.python_version(), "device": device, "dtype": str(torch_dtype),
+                 "packages": {k: importlib.metadata.version(k) for k in ['torch','numpy','pandas','chronos-forecasting','transformers','huggingface-hub']}}
+    if manifest.exists() and json.loads(manifest.read_text()) != signature:
+        raise ValueError("Resume refused: source/config changed")
+    if result_path.exists() and not manifest.exists():
+        raise ValueError("Cannot append to legacy output")
+    manifest.write_text(json.dumps(signature, indent=2))
+    pipe = ChronosPipeline.from_pretrained(args.model_id, revision=args.model_revision, device_map=device, torch_dtype=torch_dtype)
     completed = load_completed(result_path)
     combos = list(
         itertools.product(
@@ -207,10 +238,15 @@ def main() -> None:
             continue
         print(f"[{idx}/{len(combos)}] {row}", flush=True)
         try:
+            started = time.monotonic()
             raw_path = resolve_raw_path(project_root, data_run, str(asset["raw_file"]))
             raw_df = pd.read_csv(raw_path, parse_dates=["Date"])
             frame = make_eval_frame(raw_df, price_mode, int(horizon))
             origins = select_test_origins(len(frame), split_ratios, int(args.max_origins))
+            row_seed = int.from_bytes(hashlib.sha256((str(args.seed)+repr(key)).encode()).digest()[:4], "little")
+            random.seed(row_seed); np.random.seed(row_seed); torch.manual_seed(row_seed)
+            if torch.cuda.is_available(): torch.cuda.manual_seed_all(row_seed)
+            args.prediction_path = out_dir / "predictions" / (hashlib.sha256('_'.join(key).encode()).hexdigest() + '.csv')
             result = evaluate_asset(pipe, frame, origins, int(horizon), args, device)
             out = {
                 "completed_at": datetime.now().isoformat(timespec="seconds"),
@@ -218,16 +254,18 @@ def main() -> None:
                 "context_length": int(args.context_length),
                 "num_samples": int(args.num_samples),
                 "device": str(device),
+                "row_seed": row_seed,
+                "elapsed_seconds": time.monotonic() - started,
                 **result,
             }
-            out["passes_latest_rmse_gate"] = int(out["RMSE_ratio_vs_latest"] <= 1.0)
+            out["passes_latest_rmse_gate"] = int(out["RMSE_ratio_vs_latest"] < 1.0)
             append_csv(result_path, out)
             completed.add(key)
         except Exception as exc:
             errors += 1
             append_csv(error_path, {**row, "error": repr(exc), "failed_at": datetime.now().isoformat(timespec="seconds")})
             print(f"[ERROR] {row}: {exc}", flush=True)
-        if idx % 10 == 0:
+        if idx % 1 == 0:
             status_path.write_text(
                 json.dumps(
                     {
@@ -256,6 +294,8 @@ def main() -> None:
         encoding="utf-8",
     )
     print(f"Chronos zero-shot audit finished under {out_dir}")
+    if len(completed) != len(combos):
+        raise RuntimeError('Incomplete zero-shot run; inspect error CSV')
 
 
 if __name__ == "__main__":

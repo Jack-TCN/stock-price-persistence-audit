@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import argparse,json
+from audit_verification import sha,require
 
 import pandas as pd
 
@@ -13,6 +15,8 @@ OUT = PROJECT_ROOT / "source" / "tables" / "crossmarket_supplement_tables.tex"
 
 
 def esc(value: object) -> str:
+    if pd.isna(value):
+        return '--'
     return str(value).replace("&", r"\&").replace("_", r"\_").replace("%", r"\%")
 
 
@@ -25,6 +29,14 @@ def pct(value: float) -> str:
 
 
 def main() -> None:
+    global EVIDENCE, OUT
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--evidence-dir',type=Path,required=True)
+    parser.add_argument('--out-file',type=Path,required=True)
+    args=parser.parse_args();EVIDENCE=args.evidence_dir;OUT=args.out_file
+    manifest=json.loads((EVIDENCE/'aggregation_manifest.json').read_text())
+    for name in ['dataset_model_summary.csv','protocol_model_summary.csv','best_100_model_rows.csv','worst_100_model_rows.csv']:
+        require(sha(EVIDENCE/name)==manifest['outputs'][name],f'Evidence changed: {name}')
     dataset_model = pd.read_csv(EVIDENCE / "dataset_model_summary.csv")
     protocol = pd.read_csv(EVIDENCE / "protocol_model_summary.csv")
     best = pd.read_csv(EVIDENCE / "best_100_model_rows.csv").head(20)
@@ -77,14 +89,14 @@ def main() -> None:
         lines.append(r"\small")
         lines.append(rf"\textbf{{{label}.}}\\[0.5em]")
         lines.append(r"\resizebox{\textwidth}{!}{%")
-        lines.append(r"\begin{tabular}{llllrrr}")
+        lines.append(r"\begin{tabular}{llllllrrrr}")
         lines.append(r"\toprule")
-        lines.append(r"Dataset & Ticker & Model & Horizon & Price & Ratio & Pass \\")
+        lines.append(r"Dataset & Ticker & Model & Price & Features & Seed & Window & Horizon & Ratio & RMSE pass \\")
         lines.append(r"\midrule")
         for _, row in frame.iterrows():
             lines.append(
                 f"{esc(row['dataset_label'])} & {esc(row['ticker'])} & {esc(row['model'])} & "
-                f"{int(row['horizon'])} & {esc(row['price_mode'])} & {fmt(row['RMSE_ratio_vs_latest'])} & "
+                f"{esc(row['price_mode'])} & {esc(row.get('feature_set','--'))} & {esc(row.get('seed','--'))} & {esc(row.get('window_size','--'))} & {int(row['horizon'])} & {fmt(row['RMSE_ratio_vs_latest'])} & "
                 f"{int(row['passes_latest_rmse_gate'])} \\\\"
             )
         lines.append(r"\bottomrule")

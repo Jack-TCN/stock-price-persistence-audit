@@ -1,0 +1,62 @@
+{
+  "run_dir": "runs\\chronos_full_nasdaq_large_tech",
+  "rows": 12,
+  "expected_rows": 12,
+  "complete": true,
+  "result_sha256": "6b6efbe7c32006aae8248b13cbe8e25d99fc05bf7d884cde7e0421b20f56cb43",
+  "manifest_sha256": "6ef6e0be0fdf474fa61315839d2f476a1205107276a5656e2d950413dab9e9b5",
+  "verifier_sha256": "db7e81c90ebeab5e8fe1d8e275f151df5a2fc52829b8d76ab5da60d1c46bd3c3",
+  "declared_origin_selection_verified": true,
+  "traces": [
+    {
+      "key": "nasdaq_large_tech_AAPL_raw_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "ccddb58d69571d59c7d314140adce0ae6ec8ef154e8a3e1cdef19e14456b5b60"
+    },
+    {
+      "key": "nasdaq_large_tech_AAPL_raw_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "1b9fa75b06ab9677bff7cd83d708121473307a6e97c0899a53b79bc010909848"
+    },
+    {
+      "key": "nasdaq_large_tech_AAPL_raw_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "e4f5ce7730eef167d7dcb55225f8e167f9de7331b0cccf250f2e69533fc2b7e9"
+    },
+    {
+      "key": "nasdaq_large_tech_AAPL_adjusted_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "41c0b71b81dcc9f5ba42f8ba9ee2b1f7997b4999f39ff763ed218f238055db86"
+    },
+    {
+      "key": "nasdaq_large_tech_AAPL_adjusted_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "d40a67bb8c6d8fea6a7b4c401c40b6988f1ae0d274889e3286975d2934698fdb"
+    },
+    {
+      "key": "nasdaq_large_tech_AAPL_adjusted_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "78a237396a0292716a9f323950f08e7c0233866b2eb660e165f3962ff863e4fe"
+    },
+    {
+      "key": "nasdaq_large_tech_MSFT_raw_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "816e369c30ab727df85749385346fb6e17675692348728ed0c2ca979e2235ec1"
+    },
+    {
+      "key": "nasdaq_large_tech_MSFT_raw_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "b7d6ee89112678cc2a017ef02a79ce4bf4a53d3a3b6f9c5efe83ce330c4a352e"
+    },
+    {
+      "key": "nasdaq_large_tech_MSFT_raw_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "41f9fb0e364072d421619b0ffb9ad508ebcc02d6887482ab9cb02723c967a173"
+    },
+    {
+      "key": "nasdaq_large_tech_MSFT_adjusted_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "aa9fd638a6978e9a0c5d5d4715bb8ad268462ad06de51770458c626557309d7b"
+    },
+    {
+      "key": "nasdaq_large_tech_MSFT_adjusted_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "bc4d2023c72c8884a99ce26a6004d2c2be454d179a56bcdd9d49aa8e2f88131d"
+    },
+    {
+      "key": "nasdaq_large_tech_MSFT_adjusted_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "51770d203876486dba631ae364c7896ce96d153bebe9115a3c643a23f8423bda"
+    }
+  ],
+  "boundary": "Saved prediction arithmetic, declared origin selection and input provenance; not independent training reproduction or statistical inference",
+  "publication_note": "This is the historical verification report. Its manifest SHA identifies the unredacted local original, not the public path-redacted copy. Use verify_results.py for a new public forecast-only report."
+}

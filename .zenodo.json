@@ -1,0 +1,25 @@
+{
+  "title": "Do neural and zero-shot models beat persistence in stock price forecasting? A cross-market study",
+  "upload_type": "software",
+  "description": "Corrected aligned/purged stock-price persistence audit. Complete corrected result rows, exact input snapshot, all dated prediction traces, source and manuscript. Supervised RMSE wins 39/35640; sampled Chronos 119/990; full-origin small subset 1/60. Historical v0.1.2 is retained. Fitted checkpoints/scalers are excluded and can be regenerated. See RELEASE_NOTES.txt and the scope-labelled forecast-only verifier.",
+  "creators": [
+    {
+      "name": "Jack-TCN"
+    }
+  ],
+  "license": "mit",
+  "keywords": [
+    "stock-price forecasting",
+    "persistence",
+    "reproducibility",
+    "corrected evaluation"
+  ],
+  "version": "v0.2.0",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Jack-TCN/stock-price-persistence-audit/tree/v0.2.0",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

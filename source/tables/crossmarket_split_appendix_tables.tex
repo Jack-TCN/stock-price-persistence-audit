@@ -1,19 +1,45 @@
-\begin{center}
-\small
-\textbf{Table S5. Nominal chronological split boundaries by dataset.}\\[0.5em]
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrr}
+\begingroup\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{llrl l}
+\caption{Ranges of actual split origins.}\label{tab:split_ranges}\\
 \toprule
-Dataset & Assets & First date & Train/validation boundary & Validation/test boundary & Last date \\
+List & Features & Days & First validation origin & First test origin \\
 \midrule
-Dow 30 & 30 & 2015-01-02 & 2023-02-24 & 2024-01-23 & 2026-04-30 \\
-ETF basket & 12 & 2015-01-02 & 2023-02-24 & 2024-01-23 & 2026-04-30 \\
-Hang Seng large-cap & 43 & 2015-01-02 & 2023-02-22 & 2024-01-19 & 2026-04-30 \\
-Nasdaq large-tech & 30 & 2015-01-02 & 2023-02-24 & 2024-01-23 & 2026-04-30 \\
-S\&P 100 subset & 50 & 2015-01-02 & 2023-02-24 & 2024-01-23 & 2026-04-30 \\
-\bottomrule
-\end{tabular}
-}
-\end{center}
-
-\noindent Exact split indices can vary slightly after indicator construction and horizon-specific target shifting. The CSV file \texttt{split\_boundary\_summary.csv} records the raw-download nominal split boundaries, while model-result CSV files record train, validation, and test sample counts for each row.
+\endfirsthead
+\toprule
+List & Features & Days & First validation origin & First test origin \\
+\midrule
+\endhead
+\bottomrule\endfoot
+Dow 30 & OHLCV & 1 & 23-02-2023 & 22-01-2024 \\
+Dow 30 & OHLCV & 5 & 17-02-2023 & 17-01-2024 \\
+Dow 30 & OHLCV & 10 & 14-02-2023 & 10-01-2024 \\
+Dow 30 & Indicators & 1 & 09-03-2023 & 31-01-2024 \\
+Dow 30 & Indicators & 5 & 06-03-2023 & 26-01-2024 \\
+Dow 30 & Indicators & 10 & 28-02-2023 & 22-01-2024 \\
+ETF basket & OHLCV & 1 & 23-02-2023 & 22-01-2024 \\
+ETF basket & OHLCV & 5 & 17-02-2023 & 17-01-2024 \\
+ETF basket & OHLCV & 10 & 14-02-2023 & 10-01-2024 \\
+ETF basket & Indicators & 1 & 09-03-2023 & 31-01-2024 \\
+ETF basket & Indicators & 5 & 06-03-2023 & 26-01-2024 \\
+ETF basket & Indicators & 10 & 28-02-2023 & 22-01-2024 \\
+Hang Seng large-cap & OHLCV & 1 & \shortstack[l]{21-02-2023\\to 03-09-2024} & \shortstack[l]{18-01-2024\\to 26-02-2025} \\
+Hang Seng large-cap & OHLCV & 5 & \shortstack[l]{16-02-2023\\to 29-08-2024} & \shortstack[l]{15-01-2024\\to 20-02-2025} \\
+Hang Seng large-cap & OHLCV & 10 & \shortstack[l]{13-02-2023\\to 26-08-2024} & \shortstack[l]{09-01-2024\\to 14-02-2025} \\
+Hang Seng large-cap & Indicators & 1 & \shortstack[l]{06-03-2023\\to 19-09-2024} & \shortstack[l]{29-01-2024\\to 06-03-2025} \\
+Hang Seng large-cap & Indicators & 5 & \shortstack[l]{02-03-2023\\to 13-09-2024} & \shortstack[l]{24-01-2024\\to 03-03-2025} \\
+Hang Seng large-cap & Indicators & 10 & \shortstack[l]{24-02-2023\\to 09-09-2024} & \shortstack[l]{18-01-2024\\to 25-02-2025} \\
+Nasdaq large-tech & OHLCV & 1 & 23-02-2023 & 22-01-2024 \\
+Nasdaq large-tech & OHLCV & 5 & 17-02-2023 & 17-01-2024 \\
+Nasdaq large-tech & OHLCV & 10 & 14-02-2023 & 10-01-2024 \\
+Nasdaq large-tech & Indicators & 1 & 09-03-2023 & 31-01-2024 \\
+Nasdaq large-tech & Indicators & 5 & 06-03-2023 & 26-01-2024 \\
+Nasdaq large-tech & Indicators & 10 & 28-02-2023 & 22-01-2024 \\
+S\&P 100 subset & OHLCV & 1 & 23-02-2023 & 22-01-2024 \\
+S\&P 100 subset & OHLCV & 5 & 17-02-2023 & 17-01-2024 \\
+S\&P 100 subset & OHLCV & 10 & 14-02-2023 & 10-01-2024 \\
+S\&P 100 subset & Indicators & 1 & 09-03-2023 & 31-01-2024 \\
+S\&P 100 subset & Indicators & 5 & 06-03-2023 & 26-01-2024 \\
+S\&P 100 subset & Indicators & 10 & 28-02-2023 & 22-01-2024 \\
+\end{longtable}
+\endgroup

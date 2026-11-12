@@ -1,13 +1,42 @@
-\section{Related Work}
+\section{Related work}
 
-\subsection{Financial Time-Series Forecasting}
+Financial forecasting studies differ in their targets, benchmarks, and use of training data. A gain in direction classification does not establish a gain in price-level regression, and a zero-shot result does not describe every foundation model. Table~\ref{tab:related_scope} summarizes these distinctions in the work most relevant to this study. The review then connects financial targets, forecasting architectures, and model adaptation to the present audit.
 
-Neural networks and technical indicators have long been used in financial prediction studies. LSTM-based and hybrid deep-learning pipelines are common because they can process sliding windows and nonlinear features \cite{bao2017deep,patel2015trend}. Recent financial deep-learning surveys show the breadth of applications and the continuing difficulty of reliable financial prediction \cite{sezer2020stockreview,ozbayoglu2020financialsurvey}. These studies often emphasize relative performance among learned models. For absolute price-level prediction, however, persistence is not a weak baseline; it is the natural first-order comparator. This baseline-first stance is consistent with the broader finance literature on unstable out-of-sample predictability, where simple historical or persistence-like benchmarks are difficult to improve upon \cite{campbell2008predicting,welch2008comprehensive}.
+\begin{table}[htbp]
+\centering
+\caption{Targets and evaluation scope in related work.}
+\label{tab:related_scope}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}}
+\toprule
+Study & Target or scope & Main approach & Relation to this audit \\
+\midrule
+Bao et al.\ \cite{bao2017deep} & Future closing price & Hybrid deep learning & A price-level task; the present audit centers the persistence comparison. \\
+Patel et al.\ \cite{patel2015trend} & Price direction & Indicators and classifiers & A different target from absolute price regression. \\
+Campbell and Thompson; Welch and Goyal\ \cite{campbell2008predicting,welch2008comprehensive} & Excess returns and equity premium & Predictive regressions and historical-average benchmarks & Relevant benchmark lessons, with different targets and findings. \\
+Zeng et al.; Nie et al.; Liu et al.; Wang et al.\ \cite{zeng2023transformers,nie2023patchtst,liu2024itransformer,wang2024timemixer} & General time-series forecasting & Linear, patch, variate-token, and multiscale designs & Architectural context; compact proxies do not reproduce the full published systems. \\
+Ansari et al.; Goswami et al.\ \cite{ansari2024chronos,goswami2024moment} & Forecasting and general time-series analysis & Pre-training with different adaptation settings & Foundation models have different scopes; this audit tests only Chronos-T5-small. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\subsection{Modern Time-Series Models}
+\subsection{Financial targets and benchmarks}
 
-Recent forecasting research has produced architectures that patch, invert, decompose, or mix temporal representations. Deep forecasting surveys summarize the rapid architectural diversification of this area \cite{lim2021survey,benidis2022tutorial}. DLinear challenged the value of large transformer models for long-horizon forecasting \cite{zeng2023transformers}. PatchTST applies patch-based transformer modeling to multivariate time series \cite{nie2023patchtst}. iTransformer inverts the usual tokenization scheme and treats variates as tokens \cite{liu2024itransformer}. TimeMixer uses multiscale mixing to combine decomposed temporal patterns \cite{wang2024timemixer}. These models are relevant because they represent current forecasting practice beyond recurrent networks.
+Bao et al.\ combine wavelet processing, stacked autoencoders, and LSTM for future closing-price prediction \cite{bao2017deep}. Patel et al.\ instead study price movement using technical indicators and four classifiers \cite{patel2015trend}. Their classification target differs from the absolute price-level target here. Sezer et al.\ review deep learning for financial time-series forecasting, while Ozbayoglu et al.\ survey a wider range of financial applications \cite{sezer2020stockreview,ozbayoglu2020financialsurvey}. These studies provide context for model and feature choices, but their different tasks do not form a common persistence benchmark.
 
-\subsection{Foundation Models for Forecasting}
+Simple benchmarks also play a central role in return prediction. Welch and Goyal document out-of-sample difficulties in equity-premium prediction relative to a historical-average benchmark \cite{welch2008comprehensive}. Campbell and Thompson show that weak restrictions can improve predictive regressions and allow many of them to beat that benchmark \cite{campbell2008predicting}. Their findings demonstrate why the evaluation design matters, rather than a universal failure of learned forecasting. Both studies concern returns, so neither directly establishes a result about future absolute closing prices.
 
-Chronos casts time-series forecasting as a language-model-like sequence modeling problem over quantized values \cite{ansari2024chronos}. It is part of a broader foundation-model trend that includes decoder-only and general-purpose time-series models such as Lag-Llama, TimesFM, MOMENT, and Moirai \cite{rasul2023lagllama,das2024timesfm,goswami2024moment,woo2024moirai}. Such zero-shot forecasters are attractive for applied finance because they avoid per-asset training. Yet zero-shot convenience does not remove the need for a persistence gate. A foundation model that is broadly competent may still underperform the latest observed close for price-level stock forecasting.
+General forecasting research provides a further reason to keep simple comparators visible. Hyndman and Athanasopoulos define the naive forecast as the latest observation and use it as a benchmark \cite{hyndman2018forecasting}. Makridakis et al.\ compare machine-learning and statistical methods on monthly competition series and emphasize broad, explicit benchmark evaluation \cite{makridakis2018concerns}. Their experiment concerns a different collection of series and methods. We adopt the evaluation principle, while deriving the stock-price conclusions from the present experiment.
+
+\subsection{Forecasting architectures}
+
+Deep forecasting surveys describe recurrent, convolutional, attention-based, and other model families \cite{lim2021survey,benidis2022tutorial}. Recent architectures change how models represent observations rather than changing the need for a suitable benchmark. DLinear combines moving-average decomposition with separate linear projections of the resulting components \cite{zeng2023transformers}. PatchTST uses patches and channel-independent modeling, while iTransformer represents individual variates as tokens \cite{nie2023patchtst,liu2024itransformer}. TimeMixer combines decomposition with mixing across temporal scales \cite{wang2024timemixer}.
+
+The present audit uses these papers to motivate several architectural motifs. Its supervised implementations include recurrent models, a linear temporal proxy, and compact patch-based, variate-token, and multiscale proxies. The linear proxy omits the decomposition in DLinear, and the other proxies do not reproduce all components or settings of the corresponding published systems. Their results therefore describe these implementations under the present training protocol. They do not rank the official architectures or establish their best achievable performance.
+
+\subsection{Foundation models and adaptation}
+
+Chronos scales and quantizes time-series values for pre-trained probabilistic forecasting \cite{ansari2024chronos}. Lag-Llama, TimesFM, and Moirai also report zero-shot forecasting results, using different model designs and training collections \cite{rasul2023lagllama,das2024timesfm,woo2024moirai}. MOMENT covers a broader set of time-series analysis tasks and evaluates adaptation with limited supervision and task-specific fine-tuning \cite{goswami2024moment}. These models do not share one interchangeable training or adaptation protocol. Success on their benchmark tasks alone does not establish an advantage over persistence for the stock-price target here.
+
+This study evaluates only Chronos-T5-small without asset-specific fine-tuning. Its contexts, input variables, and sampled test origins differ from those of the supervised models. We therefore report its results separately and use a small full-origin subset as a limited sensitivity check. The central question is whether each selected implementation improves on its own matched persistence baseline. The experiment does not test the other foundation models or provide a controlled ranking across model families.

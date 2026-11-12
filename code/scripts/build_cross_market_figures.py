@@ -1,122 +1,27 @@
-from __future__ import annotations
-
+"""Plot verified evidence separately by evaluation protocol, retaining every ratio."""
+import argparse,json
 from pathlib import Path
-
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+import numpy as np,pandas as pd
+from audit_verification import sha,require
 
-try:
-    import seaborn as sns
-except ImportError:  # pragma: no cover - fallback for minimal reproduction environments.
-    sns = None
-
-
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-EVIDENCE = PROJECT_ROOT / "evidence_package"
-if not EVIDENCE.exists():
-    EVIDENCE = PROJECT_ROOT / "review-stage" / "cross_market_modern_audit" / "evidence_package"
-FIG_DIR = PROJECT_ROOT / "source" / "figures"
-FIGURE_BASENAME = "Figure1_RMSE_Ratio_Distribution"
-
-MODEL_ORDER = [
-    "LSTM",
-    "GRU",
-    "DLinear",
-    "PatchTST-style",
-    "iTransformer-style",
-    "TimeMixer-style",
-    "Chronos-T5-small zero-shot",
-]
-
-
-def main() -> None:
-    FIG_DIR.mkdir(parents=True, exist_ok=True)
-    df = pd.read_csv(EVIDENCE / "combined_model_results.csv")
-    df = df[df["model"].isin(MODEL_ORDER)].copy()
-    df["RMSE_ratio_vs_latest"] = df["RMSE_ratio_vs_latest"].astype(float)
-
-    # Keep the axis readable while still showing extreme failures through a capped marker.
-    df["plot_ratio"] = np.minimum(df["RMSE_ratio_vs_latest"], 20.0)
-    df["model"] = pd.Categorical(df["model"], categories=MODEL_ORDER, ordered=True)
-
-    if sns is not None:
-        sns.set_theme(style="whitegrid", context="paper", font_scale=1.1)
-    else:
-        plt.rcParams.update({"font.size": 10})
-    fig, ax = plt.subplots(figsize=(9.2, 4.2))
-    palette = ["#557AA7", "#6C8FB1", "#7A7A7A", "#B5835A", "#A36C6C", "#5D9A83", "#C45A4B"]
-
-    if sns is not None:
-        sns.boxplot(
-            data=df,
-            x="model",
-            y="plot_ratio",
-            hue="model",
-            order=MODEL_ORDER,
-            hue_order=MODEL_ORDER,
-            palette=palette,
-            legend=False,
-            width=0.62,
-            fliersize=0.6,
-            linewidth=0.9,
-            ax=ax,
-        )
-    else:
-        grouped = [df.loc[df["model"] == model, "plot_ratio"].to_numpy() for model in MODEL_ORDER]
-        box = ax.boxplot(
-            grouped,
-            widths=0.62,
-            patch_artist=True,
-            showfliers=True,
-            flierprops={"markersize": 0.6, "marker": "o"},
-            medianprops={"color": "#111111", "linewidth": 1.0},
-            whiskerprops={"linewidth": 0.9},
-            capprops={"linewidth": 0.9},
-        )
-        for patch, color in zip(box["boxes"], palette):
-            patch.set_facecolor(color)
-            patch.set_edgecolor("#333333")
-            patch.set_linewidth(0.9)
-    ax.axhline(1.0, color="#111111", linestyle="--", linewidth=1.1)
-    ax.text(4.6, 1.07, "persistence gate", ha="left", va="bottom", fontsize=9)
-    ax.set_yscale("log")
-    ax.set_ylim(0.85, 22)
-    ax.set_ylabel("RMSE ratio vs latest-close persistence (log scale)")
-    ax.set_xlabel("")
-    ax.set_title("Persistence-gate distribution across audited models", pad=10)
-    ax.set_xticks(range(len(MODEL_ORDER)))
-    ax.set_xticklabels(
-        [
-            "LSTM",
-            "GRU",
-            "DLinear",
-            "PatchTST-\nstyle",
-            "iTransformer-\nstyle",
-            "TimeMixer-\nstyle",
-            "Chronos-T5-small\nzero-shot",
-        ],
-        rotation=0,
-    )
-    ax.grid(True, which="major", axis="y", linewidth=0.55, alpha=0.55)
-    ax.grid(True, which="minor", axis="y", linewidth=0.25, alpha=0.25)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.text(
-        0.0,
-        -0.24,
-        "Values above 20 are clipped for readability; full rows are retained in the evidence package.",
-        transform=ax.transAxes,
-        ha="left",
-        va="top",
-        fontsize=8.5,
-    )
-    fig.tight_layout()
-    fig.savefig(FIG_DIR / f"{FIGURE_BASENAME}.eps", bbox_inches="tight")
-    fig.savefig(FIG_DIR / f"{FIGURE_BASENAME}.pdf", bbox_inches="tight")
-    fig.savefig(FIG_DIR / f"{FIGURE_BASENAME}.png", dpi=220, bbox_inches="tight")
-    print(FIG_DIR / f"{FIGURE_BASENAME}.eps")
-
-
-if __name__ == "__main__":
-    main()
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--evidence-dir',type=Path,required=True);p.add_argument('--out-dir',type=Path,required=True);args=p.parse_args()
+ manifest=json.loads((args.evidence_dir/'aggregation_manifest.json').read_text());file=args.evidence_dir/'combined_model_results.csv'
+ require(sha(file)==manifest['outputs'][file.name],'Evidence changed after verification')
+ df=pd.read_csv(file);require(np.isfinite(df.RMSE_ratio_vs_latest).all() and (df.RMSE_ratio_vs_latest>0).all(),'Log chart requires positive finite ratios')
+ protocols=list(df.protocol.unique());fig,axes=plt.subplots(1,len(protocols),figsize=(max(6,6*len(protocols)),5),squeeze=False,sharey=True)
+ for ax,protocol in zip(axes[0],protocols):
+  sub=df[df.protocol.eq(protocol)];models=list(sub.model.unique());values=[sub.loc[sub.model.eq(m),'RMSE_ratio_vs_latest'].to_numpy() for m in models]
+  ax.boxplot(values,tick_labels=[m.replace('Linear temporal proxy (legacy dlinear key)','Linear temporal\nproxy').replace('-style','\nstyle') for m in models],showfliers=True,flierprops={'marker':'.','markersize':2},widths=.55)
+  ax.set_yscale('log');ax.axhline(1,color='black',linestyle='--',linewidth=1)
+  ax.set_title(protocol.replace(' audit','')+f'\n{len(sub):,} experiment rows',fontsize=10);ax.tick_params(axis='x',labelsize=8,rotation=30)
+  ax.set_ylim(min(.9,float(df.RMSE_ratio_vs_latest.min())*.9),max(1.1,float(df.RMSE_ratio_vs_latest.max())*1.1));ax.grid(axis='y',alpha=.2)
+ axes[0][0].set_ylabel('RMSE / matched persistence RMSE (log scale)')
+ fig.text(.5,.01,'Descriptive distributions. Rows are dependent; evaluation protocols differ. No values are clipped.',ha='center',fontsize=8)
+ fig.tight_layout(rect=(0,.04,1,1));args.out_dir.mkdir(parents=True,exist_ok=True)
+ for ext in ['pdf','png','svg']:fig.savefig(args.out_dir/f'Figure1_RMSE_Ratio_Distribution.{ext}',dpi=200,bbox_inches='tight')
+ plt.close(fig);print(args.out_dir)
+if __name__=='__main__':main()

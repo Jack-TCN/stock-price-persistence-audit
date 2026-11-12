@@ -1,0 +1,62 @@
+{
+  "run_dir": "runs\\chronos_full_dow30",
+  "rows": 12,
+  "expected_rows": 12,
+  "complete": true,
+  "result_sha256": "6c9b7ac57d9cae88fc00d5b7b36a28980950611d1297e90103889f09daffd57b",
+  "manifest_sha256": "80e938d9ec1d9eb66edef959e30211e3a0e11b2d6beb6972686de032f703a6a3",
+  "verifier_sha256": "db7e81c90ebeab5e8fe1d8e275f151df5a2fc52829b8d76ab5da60d1c46bd3c3",
+  "declared_origin_selection_verified": true,
+  "traces": [
+    {
+      "key": "dow30_MMM_raw_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "9ff26d5aac4aa82e46be78bdb138cf0e7dd65d013a5c70b73d0d1d85373dbc42"
+    },
+    {
+      "key": "dow30_MMM_raw_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "1f6f2255bacdd9bbcc1f58b5793804d27b69e398f8cc1c4e8eeb71349bac17c7"
+    },
+    {
+      "key": "dow30_MMM_raw_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "70d533a416fe8ff6ca4e3da94b3ee883ba68bc855f96110df564d55d163e610f"
+    },
+    {
+      "key": "dow30_MMM_adjusted_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "60b49ba126858e880b62eadda622812868c53c572113b96c672d34bd0e6e9733"
+    },
+    {
+      "key": "dow30_MMM_adjusted_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "8e5ee89190662d4d777bee40353d25d39dfb84a5a41817be55e88befd0c343e1"
+    },
+    {
+      "key": "dow30_MMM_adjusted_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "c47b66180ae13eeb95ce918fa001f919419582454019465ed16bee4c66d24d0c"
+    },
+    {
+      "key": "dow30_AXP_raw_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "74b3e6efc83f0271e9c58089211b6addb5880a492db02cb847c93c7901bbdbdf"
+    },
+    {
+      "key": "dow30_AXP_raw_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "c6f97ac9068b09c02ae7304f984389887ed7366de50d7c815876102065e5996d"
+    },
+    {
+      "key": "dow30_AXP_raw_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "5585b92fe787d9427d375df50cf90cafd168f48c66387515d9b9b923b203382b"
+    },
+    {
+      "key": "dow30_AXP_adjusted_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "bb4517ab0d8287c865b4f68824b67645eb391c19de2207299fdb1e208795e07a"
+    },
+    {
+      "key": "dow30_AXP_adjusted_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "cd8b001bd86cb298e0a71132e332119cf996e396fe8b0e93a957338bc127b604"
+    },
+    {
+      "key": "dow30_AXP_adjusted_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "74ea2285d1f7329620f12b31b3db749c6db090df84159bc66c119664bc958c8b"
+    }
+  ],
+  "boundary": "Saved prediction arithmetic, declared origin selection and input provenance; not independent training reproduction or statistical inference",
+  "publication_note": "This is the historical verification report. Its manifest SHA identifies the unredacted local original, not the public path-redacted copy. Use verify_results.py for a new public forecast-only report."
+}

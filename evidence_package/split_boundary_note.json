@@ -1,0 +1,5 @@
+{
+  "source": "actual verified model rows",
+  "rows": 1980,
+  "note": "Dates differ by asset, horizon and feature availability. No representative first ticker is substituted for a dataset."
+}

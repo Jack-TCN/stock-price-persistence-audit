@@ -1,5 +1,3 @@
-# Chronos Full-Origin Subset Verification
+# Corrected full-origin subset
 
-Rows: 60; errors: 0; passes: 2; pass rate: 0.0333; median RMSE ratio: 1.0279; mean RMSE ratio: 1.0283.
-
-This subset uses two assets per dataset, both price modes, all three horizons, and all available test origins rather than the sampled-origin protocol. The result is consistent with the main sampled-origin Chronos audit: local wins exist, but the aggregate median ratio remains above 1.0.
+The 60 rows use all eligible origins for the first two asset entries in each of five configured lists, two price modes and three horizons: ten list memberships and nine unique tickers. One row improves RMSE and all three errors; median RMSE ratio is 1.0320148695195157. Selection is non-random. Separately generated sampled/full forecasts do not isolate an origin-sampling effect. This subset is reported separately from the main 990 sampled-origin rows.

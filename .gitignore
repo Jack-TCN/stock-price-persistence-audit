@@ -24,3 +24,9 @@ review-stage/
 tmp/
 _local/
 
+
+# Restored/locally generated artifacts, not additional tracked copies
+data/input_snapshot/
+runs/*/predictions/
+validation_reports/
+new_run/

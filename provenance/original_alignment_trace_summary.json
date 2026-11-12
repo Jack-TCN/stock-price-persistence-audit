@@ -1,0 +1,22 @@
+{
+  "implementation": "Python tracing of unchanged original make_windows and compute_baselines_for_series, not rewritten split logic",
+  "original_model_source_sha256": "9ff90c6985973d90ef51f9ac7ddc38620949c414b140d7bb784a9c1fed4d3bf7",
+  "original_baseline_source_sha256": "e12dbc2c695cb92890f35a5689011badf363275999f20987a95e49a5adb9b723",
+  "groups": 1980,
+  "mismatched_groups": 990,
+  "affected_rows": 17820,
+  "by_feature": {
+    "ohlcv": {
+      "groups": 990,
+      "matched": 990
+    },
+    "technical": {
+      "groups": 990,
+      "matched": 0
+    }
+  },
+  "saved_sample_counts_and_three_baseline_metrics_match": true,
+  "all_original_tensor_targets_match_raw_price_at_captured_origins_plus_horizon": true,
+  "seconds": 57.35901250000461,
+  "boundary": "Does not independently regenerate historical model predictions or recover unrecorded historical runtime."
+}

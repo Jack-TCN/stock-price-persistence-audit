@@ -1,0 +1,126 @@
+{
+  "scope": "Public saved-forecast verification after extraction, not independent training reproduction. Fitted checkpoints/scalers are intentionally excluded. Full trace reports remain local; their hashes below identify the audit receipt.",
+  "reports": [
+    {
+      "rows": 12,
+      "expected_rows": 12,
+      "complete": true,
+      "result_sha256": "6c9b7ac57d9cae88fc00d5b7b36a28980950611d1297e90103889f09daffd57b",
+      "manifest_sha256": "fc52dee60fe0ea32cb1c463caa4783a0221dfc87586120869ba559d6a7fc395d",
+      "verifier_sha256": "ce5a1797f571010d17cbfca7fb764fbbb56ff57f3fe1ff331155960a6c8861a2",
+      "declared_origin_selection_verified": true,
+      "training_boundaries_reconstructed": false,
+      "checkpoint_artifacts_verified": false,
+      "validation_scope": "saved_forecasts_inputs_and_declared_protocol",
+      "run": "chronos_full_dow30",
+      "local_report_sha256": "1445734b805b77b5bd3a929123de0a459c8249ded0978f16cddfc946612df16c"
+    },
+    {
+      "rows": 12,
+      "expected_rows": 12,
+      "complete": true,
+      "result_sha256": "5b62e0e3a619974db3c605e038e07d71c3a3597b8fecc4f47e0b1c8736dc9499",
+      "manifest_sha256": "4e6caf2b5f24437994b1563599c311b257a2293e37869a7bbb6bfea9616255b8",
+      "verifier_sha256": "ce5a1797f571010d17cbfca7fb764fbbb56ff57f3fe1ff331155960a6c8861a2",
+      "declared_origin_selection_verified": true,
+      "training_boundaries_reconstructed": false,
+      "checkpoint_artifacts_verified": false,
+      "validation_scope": "saved_forecasts_inputs_and_declared_protocol",
+      "run": "chronos_full_etf_basket",
+      "local_report_sha256": "5cf0f475650a6da47016544a22f4f81bdd5e318d725720c81f99a01c8bff14b9"
+    },
+    {
+      "rows": 12,
+      "expected_rows": 12,
+      "complete": true,
+      "result_sha256": "1ee84ece7a9cd6c8af62e9be9284dad87859868127d9988a76c86be5afcffabc",
+      "manifest_sha256": "452366fbfcd6923c76ebaf299f0e17518bb9ba0f34b94f76229d31d2b5b0bb52",
+      "verifier_sha256": "ce5a1797f571010d17cbfca7fb764fbbb56ff57f3fe1ff331155960a6c8861a2",
+      "declared_origin_selection_verified": true,
+      "training_boundaries_reconstructed": false,
+      "checkpoint_artifacts_verified": false,
+      "validation_scope": "saved_forecasts_inputs_and_declared_protocol",
+      "run": "chronos_full_hang_seng_largecap",
+      "local_report_sha256": "0b4b7ad5fe19f3180157a05801ccec435506fd78bc203278b512ec9b374a1de2"
+    },
+    {
+      "rows": 12,
+      "expected_rows": 12,
+      "complete": true,
+      "result_sha256": "6b6efbe7c32006aae8248b13cbe8e25d99fc05bf7d884cde7e0421b20f56cb43",
+      "manifest_sha256": "7a899c0b4b6fd329a4bff8962a9dcc95a09665e8f20529f4b1edacff7b351275",
+      "verifier_sha256": "ce5a1797f571010d17cbfca7fb764fbbb56ff57f3fe1ff331155960a6c8861a2",
+      "declared_origin_selection_verified": true,
+      "training_boundaries_reconstructed": false,
+      "checkpoint_artifacts_verified": false,
+      "validation_scope": "saved_forecasts_inputs_and_declared_protocol",
+      "run": "chronos_full_nasdaq_large_tech",
+      "local_report_sha256": "48b1fa815dec1408b291c8f3764142eb4688f82c38b6307c836281a7d933da75"
+    },
+    {
+      "rows": 12,
+      "expected_rows": 12,
+      "complete": true,
+      "result_sha256": "467fe9a0793d2baf45b2a2d4a0393aa507885e6e827f47c1a1641d732a14bc42",
+      "manifest_sha256": "8fba677f526202d1fef48420684bad96ad5a66eb0601f569a62494f5e6c17d86",
+      "verifier_sha256": "ce5a1797f571010d17cbfca7fb764fbbb56ff57f3fe1ff331155960a6c8861a2",
+      "declared_origin_selection_verified": true,
+      "training_boundaries_reconstructed": false,
+      "checkpoint_artifacts_verified": false,
+      "validation_scope": "saved_forecasts_inputs_and_declared_protocol",
+      "run": "chronos_full_sp100_largecap",
+      "local_report_sha256": "8aa276ddd5728bbc9bd39c784b5f86745aef914b079e1ab1ccf2e22f980f7bba"
+    },
+    {
+      "rows": 990,
+      "expected_rows": 990,
+      "complete": true,
+      "result_sha256": "c2a0c38e67c5ffcd0f51fc27b29802e1b7dff09cf8cca2eed1cff6ba5a608bb3",
+      "manifest_sha256": "65949afc0d2d843d36c2daf2ec4542f91ee566aed0bb4aaf7eab2191537aa5a9",
+      "verifier_sha256": "ce5a1797f571010d17cbfca7fb764fbbb56ff57f3fe1ff331155960a6c8861a2",
+      "declared_origin_selection_verified": true,
+      "training_boundaries_reconstructed": false,
+      "checkpoint_artifacts_verified": false,
+      "validation_scope": "saved_forecasts_inputs_and_declared_protocol",
+      "run": "chronos_sampled",
+      "local_report_sha256": "a12ae7c51abd6c3c3c9c8a2a1c0033987b0738f47f6ed8d11b4849689f682877"
+    },
+    {
+      "rows": 35640,
+      "expected_rows": 35640,
+      "complete": true,
+      "result_sha256": "ea8dda66daf2b7952ace4948b3dc4fb8a9ced961585c826e711cf2d717b6b672",
+      "manifest_sha256": "07ca66afecbacf05522d2b7db3ece96ebc9d4cd7dc4f5cfc85d0ee5cd18e5e7e",
+      "verifier_sha256": "ce5a1797f571010d17cbfca7fb764fbbb56ff57f3fe1ff331155960a6c8861a2",
+      "declared_origin_selection_verified": true,
+      "training_boundaries_reconstructed": true,
+      "checkpoint_artifacts_verified": false,
+      "validation_scope": "saved_forecasts_inputs_and_declared_protocol",
+      "run": "supervised",
+      "local_report_sha256": "7345a5656431131ec4c5fe727db21cca3694ed41525db17b4f482b0892cdd9d8"
+    }
+  ],
+  "negative_tests": [
+    {
+      "test": "valid relocated single-row saved-forecast audit",
+      "passed": true
+    },
+    {
+      "test": "tampered forecast",
+      "rejected": true,
+      "reason": "Model RMSE mismatch: dow30_MMM_raw_close_1_ohlcv_lstm_60_42"
+    },
+    {
+      "test": "tampered target date",
+      "rejected": true,
+      "reason": "Target date mismatch: dow30_MMM_raw_close_1_ohlcv_lstm_60_42"
+    },
+    {
+      "test": "falsified training target boundary",
+      "rejected": true,
+      "reason": "Reconstructed boundary mismatch train_last_target: dow30_MMM_raw_close_1_ohlcv_lstm_60_42"
+    }
+  ],
+  "renderer_check": "Both current manuscript figures rendered successfully; Matplotlib emits only an API deprecation warning.",
+  "forecast_verification_log_sha256": "372b22d2ec7a5694de7542a1d1f1fd29019cbeb10b294aba585f73cf4005bad1"
+}

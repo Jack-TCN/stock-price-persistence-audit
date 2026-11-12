@@ -1,0 +1,11 @@
+{
+  "field": "completed_at",
+  "anomalous_rows": 240,
+  "years": {
+    "1996": 39,
+    "2056": 123,
+    "2076": 78
+  },
+  "effect": "Execution-time metadata and naive duration estimates only. This field is not used for training splits, target dates, model inputs or evaluation metrics.",
+  "handling": "Preserve raw results; use append-order resume boundary and monotonic per-run elapsed_seconds for timing. Post-resume completed_at sequence currently monotonic."
+}

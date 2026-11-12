@@ -10,6 +10,10 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
+import hashlib
+import platform
+import importlib.metadata
+import time
 import joblib
 import numpy as np
 import pandas as pd
@@ -105,6 +109,11 @@ class WindowBundle:
     train_samples: int
     validation_samples: int
     test_samples: int
+    latest_test: np.ndarray
+    test_dates: np.ndarray
+    target_dates: np.ndarray
+    split_audit: dict
+    feature_scaler: object
 
 
 def make_windows(
@@ -116,6 +125,13 @@ def make_windows(
     split_ratios: dict,
 ) -> WindowBundle:
     df = raw_df.copy()
+    df['Date'] = pd.to_datetime(df['Date'])
+    if df['Date'].isna().any() or not df['Date'].is_monotonic_increasing or df['Date'].duplicated().any():
+        raise ValueError('Input dates must be unique, valid and increasing')
+    if feature_set not in {'ohlcv', 'technical'} or horizon < 1 or window_size < 1:
+        raise ValueError('Invalid feature set, horizon or window size')
+    if not np.isclose(sum(float(split_ratios[k]) for k in ['train','validation','test']), 1.0):
+        raise ValueError('Split ratios must sum to one')
     if price_mode == "adjusted_close":
         df = adjusted_ohlcv(df)
     elif price_mode != "raw_close":
@@ -124,7 +140,8 @@ def make_windows(
     df = add_indicators(df)
     df["Target"] = df["Close"].astype(float).shift(-int(horizon))
     feature_cols = BASE_FEATURES if feature_set == "ohlcv" else BASE_FEATURES + TECH_FEATURES
-    needed = ["Date", "Target", *feature_cols]
+    df["TargetDate"] = pd.to_datetime(df["Date"]).shift(-int(horizon))
+    needed = ["Date", "TargetDate", "Target", *feature_cols]
     frame = df[needed].replace([np.inf, -np.inf], np.nan).dropna().reset_index(drop=True)
     if len(frame) < window_size + 200:
         raise ValueError(f"Too few usable rows: {len(frame)}")
@@ -139,8 +156,10 @@ def make_windows(
     features.iloc[:train_end] = scaler.fit_transform(features.iloc[:train_end])
     features.iloc[train_end:] = scaler.transform(features.iloc[train_end:])
     values = features.to_numpy(dtype=np.float32)
-    target = frame["Target"].astype(float).to_numpy(dtype=np.float32)
-    train_targets = target[window_size - 1 : train_end]
+    target = frame["Target"].astype(float).to_numpy(dtype=np.float64)
+    # Purge training labels not available at the first validation origin.
+    train_available = (np.arange(len(frame)) >= window_size - 1) & (np.arange(len(frame)) < train_end) & (frame["TargetDate"].to_numpy() < frame["Date"].iloc[train_end])
+    train_targets = target[train_available]
     target_mean = float(train_targets.mean())
     target_std = float(train_targets.std())
     if target_std <= 1e-8:
@@ -152,10 +171,11 @@ def make_windows(
         ys.append(target[idx])
         label_idx.append(idx)
     x = np.asarray(xs, dtype=np.float32)
-    y = np.asarray(ys, dtype=np.float32)
+    y = np.asarray(ys, dtype=np.float64)
     label_idx_arr = np.asarray(label_idx)
-    train_mask = label_idx_arr < train_end
-    val_mask = (label_idx_arr >= train_end) & (label_idx_arr < val_end)
+    target_dates = frame["TargetDate"].to_numpy()[label_idx_arr]
+    train_mask = (label_idx_arr < train_end) & (target_dates < frame["Date"].iloc[train_end])
+    val_mask = (label_idx_arr >= train_end) & (label_idx_arr < val_end) & (target_dates < frame["Date"].iloc[val_end])
     test_mask = label_idx_arr >= val_end
 
     def xt(mask: np.ndarray) -> torch.Tensor:
@@ -165,7 +185,7 @@ def make_windows(
         raw = y[mask]
         if scaled:
             raw = (raw - target_mean) / target_std
-        return torch.from_numpy(raw.astype(np.float32)).view(-1, 1)
+        return torch.from_numpy(raw.astype(np.float32 if scaled else np.float64)).view(-1, 1)
 
     return WindowBundle(
         x_train=xt(train_mask),
@@ -180,6 +200,19 @@ def make_windows(
         train_samples=int(train_mask.sum()),
         validation_samples=int(val_mask.sum()),
         test_samples=int(test_mask.sum()),
+        feature_scaler=scaler,
+        latest_test=frame["Close"].to_numpy(dtype=float)[label_idx_arr[test_mask]],
+        test_dates=frame["Date"].to_numpy()[label_idx_arr[test_mask]],
+        target_dates=frame['TargetDate'].to_numpy()[label_idx_arr[test_mask]],
+        split_audit={"train_last_origin": str(frame["Date"].iloc[label_idx_arr[train_mask][-1]]),
+                     "train_last_target": str(frame['TargetDate'].iloc[label_idx_arr[train_mask][-1]]),
+                     "validation_first_origin": str(frame["Date"].iloc[train_end]),
+                     "validation_last_origin": str(frame["Date"].iloc[label_idx_arr[val_mask][-1]]),
+                     "validation_last_target": str(frame['TargetDate'].iloc[label_idx_arr[val_mask][-1]]),
+                     "test_first_origin": str(frame["Date"].iloc[val_end]),
+                     "test_last_origin": str(frame["Date"].iloc[-1]),
+                     "purged_train_rows": int(((label_idx_arr < train_end) & ~train_mask).sum()),
+                     "purged_validation_rows": int((((label_idx_arr >= train_end) & (label_idx_arr < val_end)) & ~val_mask).sum())},
     )
 
 
@@ -333,6 +366,7 @@ def regression_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, floa
 
 
 def train_eval(bundle: WindowBundle, row: dict, args: argparse.Namespace, device: torch.device) -> dict:
+    started = time.monotonic()
     model = build_model(
         row["model_type"],
         int(row["window_size"]),
@@ -375,25 +409,38 @@ def train_eval(bundle: WindowBundle, row: dict, args: argparse.Namespace, device
         if wait >= args.patience:
             break
 
-    if best_state is not None:
-        model.load_state_dict(best_state)
+    if best_state is None:
+        raise ValueError("No finite validation checkpoint; refusing to report a final model")
+    model.load_state_dict(best_state)
     model.eval()
     with torch.no_grad():
         pred_scaled = model(bundle.x_test.to(device)).cpu().numpy().reshape(-1)
-    pred = pred_scaled * bundle.target_std + bundle.target_mean
+    pred = (pred_scaled * bundle.target_std + bundle.target_mean).astype(np.float64)
     y_true = bundle.y_test.numpy().reshape(-1)
     test = regression_metrics(y_true, pred)
+    latest = regression_metrics(y_true, bundle.latest_test)
+    if getattr(args, "artifact_dir", None):
+        key = "_".join(str(row[k]) for k in ["dataset","ticker","price_mode","horizon","feature_set","model_type","window_size","seed"])
+        artifact = Path(args.artifact_dir) / (key + ".csv")
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        joblib.dump(bundle.feature_scaler, artifact.with_suffix(".scaler.joblib"))
+        torch.save({"state_dict": best_state, "target_mean": bundle.target_mean, "target_std": bundle.target_std, "configuration": row}, artifact.with_suffix(".pt"))
+        pd.DataFrame({"origin_date": bundle.test_dates, "target_date": bundle.target_dates, "target": y_true,
+                      "prediction": pred, "persistence": bundle.latest_test}).to_csv(artifact, index=False)
     with torch.no_grad():
         val_pred = model(bundle.x_val.to(device)).cpu().numpy().reshape(-1) * bundle.target_std + bundle.target_mean
     val_true = bundle.y_val.numpy().reshape(-1) * bundle.target_std + bundle.target_mean
     val = regression_metrics(val_true, val_pred)
     return {
+        "elapsed_seconds": time.monotonic() - started,
         "best_epoch": best_epoch,
         "stopped_epoch": epoch,
         "best_val_loss_scaled": best_val,
         "best_val_RMSE": val["RMSE"],
         "best_val_MAE": val["MAE"],
         "best_val_MAPE": val["MAPE"],
+        **{f"latest_{k}": v for k, v in latest.items()},
+        **bundle.split_audit,
         "test_RMSE": test["RMSE"],
         "test_MAE": test["MAE"],
         "test_MAPE": test["MAPE"],
@@ -432,21 +479,23 @@ def resolve_raw_path(project_root: Path, data_run: Path, raw_file: str) -> Path:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run cross-market model audit against latest-close persistence.")
+    parser.add_argument("--tickers", nargs="+", default=None)
+    parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--data-run", type=Path, default=DEFAULT_DATA_RUN)
     parser.add_argument("--out-dir", type=Path, default=None)
     parser.add_argument("--datasets", nargs="+", default=None)
-    parser.add_argument("--models", nargs="+", default=["lstm", "gru", "dlinear"])
+    parser.add_argument("--models", nargs="+", default=["lstm", "gru", "dlinear", "patchtst", "itransformer", "timemixer"])
     parser.add_argument("--feature-sets", nargs="+", default=["ohlcv", "technical"])
     parser.add_argument("--price-modes", nargs="+", default=["raw_close", "adjusted_close"])
     parser.add_argument("--horizons", nargs="+", type=int, default=[1, 5, 10])
-    parser.add_argument("--window-sizes", nargs="+", type=int, default=[20, 60])
-    parser.add_argument("--seeds", nargs="+", type=int, default=[42, 123, 777, 2025, 3407])
+    parser.add_argument("--window-sizes", nargs="+", type=int, default=[60])
+    parser.add_argument("--seeds", nargs="+", type=int, default=[42, 123, 777])
     parser.add_argument("--hidden-size", type=int, default=64)
     parser.add_argument("--learning-rate", type=float, default=0.001)
     parser.add_argument("--dropout", type=float, default=0.1)
     parser.add_argument("--weight-decay", type=float, default=0.0)
-    parser.add_argument("--epochs", type=int, default=100)
-    parser.add_argument("--patience", type=int, default=10)
+    parser.add_argument("--epochs", type=int, default=80)
+    parser.add_argument("--patience", type=int, default=8)
     parser.add_argument("--min-delta", type=float, default=1e-5)
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--device", default="auto")
@@ -455,6 +504,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    torch.set_num_threads(args.threads)
     project_root = resolve_project_root()
     data_run = args.data_run if args.data_run.is_absolute() else project_root / args.data_run
     out_dir = args.out_dir or (project_root / DEFAULT_OUT_ROOT / f"models_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
@@ -470,7 +520,27 @@ def main() -> None:
     summary = pd.read_csv(data_run / "dataset_download_summary.csv")
     if args.datasets:
         summary = summary[summary["dataset"].isin(args.datasets)].copy()
-    latest = load_latest_baselines(data_run)
+    if args.tickers:
+        summary = summary[summary["ticker"].isin(args.tickers)].copy()
+    if summary.empty or summary.duplicated(['dataset','ticker']).any():
+        raise ValueError('Empty or duplicate asset selection')
+    args.artifact_dir = out_dir / "predictions"
+    input_hashes = {}
+    for _, asset in summary.iterrows():
+        rp = resolve_raw_path(project_root, data_run, str(asset["raw_file"]))
+        input_hashes[f"{asset['dataset']}/{asset['ticker']}"] = hashlib.sha256(rp.read_bytes()).hexdigest()
+    signature = {"input_sha256": input_hashes, "protocol_version": "aligned-purged-v2", "source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                 "protocol": protocol, "arguments": {k: str(v) if isinstance(v, Path) else v for k,v in vars(args).items()},
+                 "python": platform.python_version(), "torch": torch.__version__,
+                 "packages": {k: importlib.metadata.version(k) for k in ['numpy','pandas','scikit-learn','ta','joblib']},
+                 "device": str(args.device), "cuda": torch.version.cuda,
+                 "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None}
+    manifest = out_dir / "run_manifest.json"
+    if manifest.exists() and json.loads(manifest.read_text()) != signature:
+        raise ValueError("Resume refused: source/config/environment changed")
+    if result_path.exists() and not manifest.exists():
+        raise ValueError("Refusing to append corrected results to a legacy run")
+    manifest.write_text(json.dumps(signature, indent=2), encoding="utf-8")
 
     key_fields = [
         "dataset",
@@ -483,7 +553,8 @@ def main() -> None:
         "seed",
     ]
     completed = load_completed(result_path, key_fields)
-    errored = load_completed(error_path, key_fields)
+    # Failed rows are retried on resume; only successful rows are skipped.
+    errored = set()
 
     if args.device == "auto":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -539,12 +610,6 @@ def main() -> None:
                 split_ratios=split_ratios,
             )
             result = train_eval(bundle, row, args, device)
-            base = latest[
-                (latest["dataset"] == row["dataset"])
-                & (latest["ticker"] == row["ticker"])
-                & (latest["price_mode"] == row["price_mode"])
-                & (latest["horizon"] == int(row["horizon"]))
-            ].iloc[0]
             out = {
                 "completed_at": datetime.now().isoformat(timespec="seconds"),
                 **row,
@@ -556,14 +621,11 @@ def main() -> None:
                 "target_mean_train": bundle.target_mean,
                 "target_std_train": bundle.target_std,
                 **result,
-                "latest_RMSE": float(base["latest_RMSE"]),
-                "latest_MAE": float(base["latest_MAE"]),
-                "latest_MAPE": float(base["latest_MAPE"]),
             }
             out["RMSE_ratio_vs_latest"] = out["test_RMSE"] / out["latest_RMSE"]
             out["MAE_ratio_vs_latest"] = out["test_MAE"] / out["latest_MAE"]
             out["MAPE_ratio_vs_latest"] = out["test_MAPE"] / out["latest_MAPE"]
-            out["passes_latest_rmse_gate"] = int(out["RMSE_ratio_vs_latest"] <= 1.0)
+            out["passes_latest_rmse_gate"] = int(out["RMSE_ratio_vs_latest"] < 1.0)
             append_csv(result_path, out)
             completed.add(key)
         except Exception as exc:
@@ -571,7 +633,7 @@ def main() -> None:
             errored.add(key)
             print(f"[ERROR] {row}: {exc}", flush=True)
 
-        if idx % 25 == 0:
+        if idx % 1 == 0:
             status_path.write_text(
                 json.dumps(
                     {
@@ -600,6 +662,8 @@ def main() -> None:
         encoding="utf-8",
     )
     print(f"Model audit finished under {out_dir}")
+    if len(completed) != len(combos):
+        raise RuntimeError("Run incomplete: inspect model_errors.csv")
 
 
 if __name__ == "__main__":

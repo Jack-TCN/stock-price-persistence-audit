@@ -1,0 +1,2 @@
+protocol,model,rows,passes,pass_rate,all_three_passes,median_rmse_ratio,mean_rmse_ratio,q1_rmse_ratio,q3_rmse_ratio,min_rmse_ratio
+full-origin zero-shot subset,Chronos-T5-small full-origin subset,60,1,0.016666666666666666,1,1.0320148695195157,1.0312064956853257,1.0221170674567337,1.0403083326547122,0.9937460611817748

@@ -1,59 +1,9 @@
-# Reproducibility Manifest
+# Corrected reproducibility map
 
-## Study Scope
+`evidence_package/combined_model_results.csv` contains the 35,640 supervised and 990 sampled-origin rows. `chronos_full_origin_subset_60_rows.csv` is separate. Model, list and horizon summaries use descriptive statistics; split_boundary_exact.csv has all 1,980 actual conditions. Best/worst extracts retain complete experiment keys. Source paths in derived combined CSVs are portable and numeric fields retain double precision.
 
-The study audits absolute stock-price level forecasting against latest-close persistence. It covers 165 dataset-series memberships, corresponding to 133 unique ticker symbols after cross-index overlaps, across Dow 30, Nasdaq large-tech, S&P 100 subset, Hang Seng large-cap, and ETF basket lists.
+`data/artifact_parts.json` lists hashes of the exact input ZIP and all forecast archives. `prepare_artifacts.py` performs path-safe extraction and checks those hashes. Forecast-only verification rebuilds exact declared test selections, raw targets, persistence and all three error measures. Its output explicitly says that checkpoint/scaler bytes were not supplied. Full training produces those objects and enables full artifact checking.
 
-## Main Evidence Files
+Training/generation source bytes match the frozen run. The public verifier adds relocation and an explicit forecast-only scope without altering the prediction/target/metric tests. Portable run manifests have local path fields redacted and keep the SHA256 of their unredacted originals. `original_verification.json` reports belong to those originals; new verification writes a separately named public report rather than overwriting them. Runtime and execution-timestamp metadata caveats are retained in provenance/.
 
-- `evidence_package/combined_model_results.csv`: all supervised and sampled-origin Chronos result rows.
-- `evidence_package/model_gate_summary.csv`: model-level pass counts, pass rates, RMSE-ratio medians, confidence intervals, and Wilcoxon diagnostics.
-- `evidence_package/model_horizon_summary.csv`: model-by-horizon median RMSE ratios.
-- `evidence_package/dataset_model_summary.csv`: dataset-by-model summaries.
-- `evidence_package/dataset_coverage.csv`: dataset membership counts and date coverage.
-- `evidence_package/split_boundary_summary.csv`: nominal chronological split boundaries.
-- `evidence_package/best_100_model_rows.csv`: best row-level cases by RMSE ratio.
-- `evidence_package/worst_100_model_rows.csv`: worst row-level cases by RMSE ratio.
-- `evidence_package/chronos_full_origin_subset_60_rows.csv`: full-origin Chronos subset verification cited in the manuscript.
-- `evidence_package/FULL_ORIGIN_SUBSET_SUMMARY.md`: compact summary of the full-origin subset.
-- `evidence_package/full_origin_subset_by_dataset.csv`: full-origin subset grouped by dataset.
-- `evidence_package/full_origin_subset_by_horizon.csv`: full-origin subset grouped by horizon.
-
-## Source Files
-
-- `source/main.tex`: main manuscript source.
-- `source/supplementary_material.tex`: supplement source.
-- `source/sections/`: manuscript and supplementary section files loaded with `\input`.
-- `source/tables/crossmarket_core_tables.tex`: core manuscript tables.
-- `source/tables/crossmarket_supplement_tables.tex`: expanded supplement tables.
-- `source/tables/crossmarket_split_appendix_tables.tex`: split-boundary appendix tables.
-- `source/figures/Figure1_RMSE_Ratio_Distribution.eps`: EPS figure used by the manuscript.
-- `source/figures/Figure1_RMSE_Ratio_Distribution.pdf` and `.png`: companion figure formats retained for compatibility and preview.
-
-## Code Files
-
-- `code/scripts/run_cross_market_data_audit.py`: data download and audit stage.
-- `code/scripts/run_cross_market_model_audit.py`: supervised model audit stage.
-- `code/scripts/run_chronos_zero_shot_audit.py`: Chronos zero-shot audit stage.
-- `code/scripts/build_cross_market_evidence_tables.py`: evidence table generation.
-- `code/scripts/build_cross_market_figures.py`: figure generation.
-- `code/scripts/build_cross_market_supplement_tables.py`: supplement table generation.
-- `code/scripts/build_split_appendix.py`: split-boundary appendix generation.
-
-## Verification Targets
-
-The package-level checker `verify_results.py` verifies the headline row counts and Chronos full-origin subset counts:
-
-- total combined result rows: 36,630
-- supervised result rows: 35,640
-- sampled-origin Chronos rows: 990
-- supervised persistence-gate passes: 23
-- sampled-origin Chronos passes: 133
-- full-origin Chronos subset rows: 60
-- full-origin Chronos subset passes: 2
-
-## Archived Release
-
-The public repository has been archived on Zenodo. Use the concept DOI for citation and long-term access:
-
-- https://doi.org/10.5281/zenodo.20412777
+The main and supplementary PDFs match source/ and use corrected numeric tables. The raw input snapshot is retrospective, lists are selected and overlapping, and source adjustments are not verified as historically available. Shared assets, configurations and dates limit inference. These caveats are scientific limits, not defects hidden by the package verifier.

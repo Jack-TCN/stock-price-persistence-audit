@@ -1,14 +1,8 @@
-\section{Included Artifacts}
+\section{Results and evidence files}
 
-The evidence package contains the following generated files:
-\begin{itemize}
-\item \texttt{combined\_model\_results.csv}: unified supervised and Chronos result rows.
-\item \texttt{model\_gate\_summary.csv}: model-level pass rates and RMSE-ratio confidence intervals.
-\item \texttt{model\_horizon\_summary.csv}: horizon-level summaries.
-\item \texttt{dataset\_model\_summary.csv}: dataset-by-model summaries.
-\item \texttt{best\_100\_model\_rows.csv} and \texttt{worst\_100\_model\_rows.csv}: row-level extremes.
-\item \texttt{chronos\_full\_origin\_subset\_60\_rows.csv}: the 60-row full-origin Chronos subset verification cited in the main manuscript.
-\item \texttt{FULL\_ORIGIN\_SUBSET\_SUMMARY.md}: a compact summary of the full-origin subset verification.
-\end{itemize}
+Tables~\ref{tab:sup_market} and~\ref{tab:zero_market} separate supervised and sampled-origin results by asset list. Table~\ref{tab:full_subset} reports the small full-origin subset, which contains nine unique tickers. Tables~\ref{tab:best_rows} and~\ref{tab:worst_rows} retain the price mode, feature set, horizon, and seed for selected supervised rows. All win counts use strict comparisons at full precision, so a displayed ratio rounded to 1.00 does not determine a gate result. The underlying files retain full numeric precision and the complete experiment keys.
 
 \input{tables/crossmarket_supplement_tables}
+\FloatBarrier
+
+The local evidence directories \texttt{corrected\_evidence} and \texttt{full\_origin\_evidence} contain separate combined results and model, horizon, and list summaries. Per-run files retain input and source hashes, arguments, package versions, dated predictions, and verification outputs. The supervised batch also stores fitted checkpoints and feature scalers. The project preserves the old archive, so its original numbers remain traceable rather than silently overwritten. A later public release must identify the corrected batch separately.

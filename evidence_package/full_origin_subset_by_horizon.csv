@@ -1,4 +1,4 @@
-horizon,rows,passes,pass_rate,median_ratio
-1,20,0,0.0,1.029729592981141
-5,20,0,0.0,1.0251850712682535
-10,20,2,0.1,1.0283175973236236
+protocol,model,horizon,rows,passes,pass_rate,all_three_passes,median_rmse_ratio,mean_rmse_ratio,q1_rmse_ratio,q3_rmse_ratio,min_rmse_ratio
+full-origin zero-shot subset,Chronos-T5-small full-origin subset,1,20,0,0.0,0,1.0338354170925814,1.03718855964198,1.0289507719769317,1.042454600449663,1.0207370642813456
+full-origin zero-shot subset,Chronos-T5-small full-origin subset,5,20,0,0.0,0,1.024208786459544,1.0278745261241486,1.016039981483307,1.0405729859753154,1.0020559058494327
+full-origin zero-shot subset,Chronos-T5-small full-origin subset,10,20,1,0.05,1,1.0327365440739542,1.0285564012898487,1.0249381213995763,1.035900239749926,0.9937460611817748

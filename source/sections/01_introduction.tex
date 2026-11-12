@@ -1,20 +1,16 @@
 \section{Introduction}
 
-Stock-price forecasting remains a common applied machine-learning problem. A typical study gathers daily OHLCV data, adds technical indicators, trains a neural network, and reports RMSE, MAE, or MAPE on a held-out period. More recent versions of this workflow replace recurrent networks with transformer-based or foundation-style time-series models. However, a central evaluation problem remains: absolute stock prices are highly persistent. If the target is the future price level, the no-training rule that the future close equals the latest observed close is often extremely hard to beat.
+Stock-price forecasting asks a simple question: how much of a future price can past observations explain? For price-level prediction, the latest observed close already provides a forecast without model training. This rule, known as latest-close persistence, is a standard naive forecasting method \cite{hyndman2018forecasting}. A learned model must improve on this comparator before its lower error against another learned model establishes an advantage over persistence.
 
-This observation changes the order of evidence required for a credible paper. Before asking whether one architecture is better than another, the first question is whether any learned model adds value beyond latest-close persistence on the same chronological test labels. If the answer is no, then claims about feature engineering, architectural novelty, or model sophistication are not supported for this target.
+The target and evaluation design determine what such an advantage means. Predicting a future price level differs from predicting its direction, an excess return, or a profitable trading decision. A model and its baseline also need the same forecast origins and target dates for a meaningful error comparison. Different feature requirements can otherwise change the usable observations and the resulting test period.
 
-The original version of this project was a conventional applied stock-prediction study using LSTM/GRU models and technical indicators. Expanded audit experiments invalidated that positive framing. The current paper therefore reframes the work as a baseline-first diagnostic audit:
-
-\begin{quote}
-Do selected supervised and zero-shot time-series models reliably beat latest-close persistence in absolute stock-price level forecasting?
-\end{quote}
-
-Under the audited protocol, the answer is largely negative. Supervised neural models almost never clear the persistence gate. Chronos-T5-small zero-shot forecasting produces more local wins, especially at longer horizons, but remains slightly worse than persistence in median RMSE ratio. This is a stronger and more honest contribution than claiming a fragile positive result from a narrow model comparison.
+This study asks whether selected neural and zero-shot time-series models beat persistence in cross-market price-level prediction. The experiment grid covers 165 asset entries, representing 133 unique tickers across five configured lists. It includes two price modes and three forecast horizons, with several compact supervised implementations and Chronos-T5-small. Only 39 of 35,640 supervised configuration--seed rows achieve lower RMSE than matched persistence, and every supervised implementation has a median RMSE ratio above one. Chronos has local wins, but its sampled-origin median also remains above one; its different protocol prevents a direct ranking against the supervised models.
 
 The paper makes three contributions:
 \begin{itemize}
-\item It defines a cross-market baseline-first protocol for absolute stock-price forecasting, using matched chronological evaluation and a mandatory persistence gate.
-\item It audits recurrent, linear, transformer-style, multiscale, and zero-shot foundation-model forecasters across 165 dataset-series memberships, two price modes, and three horizons.
-\item It reports a negative result that is useful for applied researchers: architecture comparisons should be interpreted only after a model beats no-training persistence.
+\item A baseline-first evaluation that pairs each model forecast with persistence on the same origins and target dates.
+\item A cross-market comparison of selected compact implementations and one small zero-shot model, with separate reporting for different evaluation protocols.
+\item Corrected evaluation records with dated forecasts, explicit experiment keys, and descriptive summaries that make the scope of the negative result clear.
 \end{itemize}
+
+The following sections review related work, describe the corrected protocol, and report the results. The discussion and limitations explain which conclusions the experiment supports. The reproducibility sections distinguish the corrected local evidence from the earlier public archive.

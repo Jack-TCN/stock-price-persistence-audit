@@ -1,15 +1,21 @@
 \section{Discussion}
 
-\subsection{Why Persistence Is Hard to Beat}
+The corrected results support a limited conclusion: most configurations in this experiment do not improve on matched persistence. The interpretation depends on the price-level target, the compact implementations, and the evaluation protocol. The following discussion explains the role of the baseline and the boundaries of the evidence.
 
-Absolute price levels contain a strong identity component: the next close is usually close to the current close. A learned model trained with sliding windows must estimate both the level and the small future change. Even when it learns the broad level, small lag or smoothing errors can dominate the RMSE difference against persistence. This explains why visually plausible neural predictions can still fail the gate.
+\subsection{The role of persistence}
 
-\subsection{What the Negative Result Means}
+The persistence forecast starts from the current price level and assumes no change over the forecast horizon. A learned model must estimate a level accurately enough to improve on that simple rule. Lag or smoothing errors may help explain why a visually plausible prediction still has higher RMSE. The present experiment does not isolate those mechanisms, so they remain possible explanations rather than demonstrated causes.
 
-The result does not show that financial forecasting is impossible. It also does not evaluate return prediction, direction classification, volatility forecasting, ranking, portfolio construction, or trading profitability. The conclusion is narrower and more useful: for absolute stock-price level regression, no-training persistence must be passed before claims about architecture, indicators, or foundation models are credible.
+The rare wins also need a precise interpretation. The 39 supervised RMSE wins are configuration--seed rows, not 39 independent assets. Twenty rows improve all three error measures, which is a stricter descriptive criterion. Neither count establishes a generally superior forecasting system, because related rows reuse assets, targets, and observations.
 
-\subsection{Implications for Applied Papers}
+\subsection{The scope of the negative result}
 
-Applied stock-prediction papers should report persistence baselines as primary evidence, not as a supplementary sanity check. If a model fails persistence, comparisons among learned models should be presented as engineering diagnostics rather than forecasting usefulness. If a model passes persistence only in selected assets or horizons, the claim should be local and conditional rather than general.
+Every supervised implementation has a median RMSE ratio above one, and Chronos-T5-small also has a median above one within its sampled-origin protocol. These summaries describe the fixed experiment grid. They do not identify the performance of official full-capacity architectures, larger foundation models, or alternative training searches. The different origins, context lengths, and input variables also prevent a direct model-family ranking.
 
-Even these compact implementations capture core architectural motifs that distinguish modern forecasters, including patching, channel-wise attention, and multiscale mixing. Their underperformance reinforces the baseline-first message, although official full-scale reproductions would still be required for model-specific conclusions about the published architectures.
+The target further limits the conclusion. The study evaluates future absolute closing prices rather than returns, direction, volatility, portfolio rankings, or trading profit. Those tasks need their own loss functions, benchmarks, and evaluation designs. The result therefore supports caution about forecasting claims for this price-level task, rather than a claim that financial forecasting is impossible.
+
+\subsection{Implications for evaluation}
+
+For price-level studies, we recommend reporting persistence alongside learned-model comparisons. Each comparison should state its forecast origins, target dates, training information, and checkpoint-selection rule. A claimed gain from indicators or architecture also needs a design that holds the relevant evaluation conditions constant. When gains occur only in particular assets, horizons, or seeds, the conclusion should retain those conditions.
+
+The correction also shows why dated forecasts matter. An error ratio can be arithmetically correct while comparing model and baseline errors from different test samples. The corrected workflow stores both forecasts on the same dates and verifies their metrics against the original price records. This improves traceability, but it does not remove the remaining data-availability, selection, and statistical-dependence limits.

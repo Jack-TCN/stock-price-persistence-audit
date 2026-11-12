@@ -1,0 +1,8 @@
+v0.2.0 — corrected aligned/purged evaluation
+
+This release supersedes the evidence in v0.1.2 without erasing it.
+The original technical-feature branch compared 990 conditions (17,820 supervised rows) with baseline errors from different test dates. The corrected batch computes persistence on each model's own test origins, purges labels across train/validation/test boundaries, and retains dated predictions and provenance.
+Corrected RMSE wins: supervised 39/35,640; sampled Chronos 119/990; small full-origin Chronos subset 1/60. All-three wins: 20, 67 and 1.
+Changes also include target normalization/checkpoint handling and a newly recorded runtime. Old and new outputs cannot be used to identify one repair's isolated causal effect. A denominator-only 23→24 diagnostic is NOT the corrected training result.
+The legacy dlinear key denotes a linear temporal proxy, not official DLinear. Statistics are descriptive; repeated assets/configurations are dependent and protocols differ. The exact input snapshot and all dated forecast CSVs are included. Original fitted checkpoints/scalers remain local and can be regenerated; they are not required for the explicitly labelled public forecast-only verification.
+The 240 anomalous completed_at years are execution metadata only and remain unmodified. They do not select the data, labels, splits, or errors.

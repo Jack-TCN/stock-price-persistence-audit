@@ -1,5 +1,6 @@
-\section{Split Boundaries}
+\section{Actual time splits}
 
-The main paper uses chronological train/validation/test splits. Table S5 reports nominal split dates computed from the raw downloaded records. Exact model-row sample counts are retained in the evidence package because technical indicators and horizon-specific target shifting slightly change usable row counts.
+The split rule assigns 72\%, 8\%, and 20\% of each condition's usable observations to training, validation, and testing before boundary removal. Training and validation labels must have target dates strictly before the next segment's first forecast origin. Table~\ref{tab:split_ranges} shows the minimum and maximum first-origin dates across assets and price modes for each list, feature set, and horizon. A range denotes variation across conditions, not an interval used as one shared split. The complete file \texttt{split\_boundary\_exact.csv} records dates, retained sample counts, and removed boundary rows for all 1,980 conditions.
 
 \input{tables/crossmarket_split_appendix_tables}
+\FloatBarrier

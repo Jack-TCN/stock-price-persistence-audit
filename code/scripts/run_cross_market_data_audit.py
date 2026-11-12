@@ -108,6 +108,7 @@ def compute_baselines_for_series(
     if train_end <= 20 or val_end >= len(frame) - 20:
         raise ValueError(f"not enough rows after horizon={horizon}: {len(frame)}")
 
+    # These diagnostics fit only already observed closes, never shifted labels.
     train = frame.iloc[:train_end].copy()
     test = frame.iloc[val_end:].copy()
     drift = float(train["close_t"].diff(horizon).dropna().mean())
@@ -177,23 +178,31 @@ def main() -> None:
             csv_path = dataset_raw / f"{ticker.replace('/', '_')}.csv"
             try:
                 cached = None if args.no_project_cache else load_project_cache(project_root, ticker, end)
-                if args.skip_download and csv_path.exists():
+                if args.skip_download:
+                    if not csv_path.exists():
+                        raise FileNotFoundError(f'--skip-download requires {csv_path}')
                     df = pd.read_csv(csv_path, parse_dates=["Date"])
                 elif cached is not None:
                     df = cached
-                    shutil.copyfile(project_root / "data" / "raw" / f"{ticker.replace('/', '_')}.csv", csv_path)
+                    df.to_csv(csv_path, index=False, encoding="utf-8-sig")
                 else:
                     df = download_one(ticker, start, end, args.retries, args.retry_sleep)
                     df.to_csv(csv_path, index=False, encoding="utf-8-sig")
                     if args.download_delay > 0:
                         time.sleep(args.download_delay)
 
+                df["Date"] = pd.to_datetime(df["Date"])
+                df = df[(df["Date"] >= pd.Timestamp(start)) & (df["Date"] < pd.Timestamp(end))].sort_values("Date").reset_index(drop=True)
+                if df["Date"].duplicated().any():
+                    raise ValueError("Duplicate dates in input")
                 required = {"Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"}
                 missing = sorted(required - set(df.columns))
                 if missing:
                     raise ValueError(f"missing columns: {missing}")
                 if len(df) < 800:
                     raise ValueError(f"too few rows: {len(df)}")
+                # Save exactly the filtered frame represented by the summary.
+                df.to_csv(csv_path, index=False, encoding='utf-8-sig')
 
                 summary_rows.append(
                     {
@@ -203,7 +212,7 @@ def main() -> None:
                         "start": str(pd.to_datetime(df["Date"]).min().date()),
                         "end": str(pd.to_datetime(df["Date"]).max().date()),
                         "missing_values": int(df[list(required)].isna().sum().sum()),
-                        "raw_file": csv_path.relative_to(project_root).as_posix(),
+                        "raw_file": str(csv_path.resolve()),
                     }
                 )
 
@@ -256,7 +265,7 @@ def main() -> None:
                 median_rmse_ratio=("RMSE_ratio_vs_latest", "median"),
                 min_rmse_ratio=("RMSE_ratio_vs_latest", "min"),
                 max_rmse_ratio=("RMSE_ratio_vs_latest", "max"),
-                pass_count=("RMSE_ratio_vs_latest", lambda s: int((s <= 1.0).sum())),
+                pass_count=("RMSE_ratio_vs_latest", lambda s: int((s < 1.0).sum())),
             )
             .reset_index()
             .sort_values(["dataset", "price_mode", "horizon", "mean_rmse_ratio"])
@@ -266,7 +275,7 @@ def main() -> None:
     readme = [
         "# Cross-Market Modern Audit Run",
         "",
-        f"Run directory: `{run_dir.relative_to(project_root).as_posix()}`",
+        f"Run directory: `{run_dir.resolve()}`",
         f"Started/finished: `{datetime.now().isoformat(timespec='seconds')}`",
         "",
         "This first-stage run downloads cross-market OHLCV data and computes no-training baseline gates.",
@@ -279,7 +288,7 @@ def main() -> None:
         "- `naive_baseline_with_gate.csv`",
         "- `naive_baseline_gate_summary.csv`",
     ]
-    (run_dir / "README.md").write_text("\n".join(readme) + "\n", encoding="utf-8")
+    (run_dir / 'run_status.json').write_text(json.dumps({'rows':len(summary_rows),'failures':failure_rows,'description':readme},indent=2),encoding='utf-8')
     print(f"Cross-market data audit completed: {run_dir}")
     print(f"Downloaded assets: {summary_df['ticker'].nunique() if not summary_df.empty else 0}")
     print(f"Failures: {len(failure_rows)}")

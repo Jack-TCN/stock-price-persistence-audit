@@ -3,25 +3,33 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage{epstopdf}
+\usepackage{microtype}
+\usepackage{longtable}
+\usepackage{array,needspace}
+\usepackage{placeins}
 \usepackage{hyperref}
 \usepackage{url}
+\hypersetup{hidelinks}
+\setlength{\emergencystretch}{2em}
 \usepackage[margin=1in]{geometry}
 
-\title{Do Selected Neural and Zero-Shot Time-Series Models Beat Persistence in Absolute Stock-Price Forecasting? A Cross-Market Audit}
+\title{Do neural and zero-shot models beat persistence in stock price forecasting? A cross-market study}
 
-\author{Chu-Nuo Tan\\
 
-Guangzhou Maritime University\\
-Guangzhou, China}
-
+\author{Chu-Nuo Tan\textsuperscript{1} \and Himat Shah\textsuperscript{2}\thanks{Corresponding author.}}
 \date{}
 
 \begin{document}
 \maketitle
+\begin{center}
+\small
+\textsuperscript{1}Guangzhou Maritime University, Guangzhou, China\\[0.4em]
+\textsuperscript{2}Robotics and Artificial Intelligence, Centria University of Applied Sciences,\\
+Vierimaantie 7, 84100 Ylivieska, Finland
+\end{center}
 
 \begin{abstract}
-Supervised neural and zero-shot time-series forecasting models are increasingly applied to financial price prediction, but many stock-price studies still evaluate models before verifying whether they outperform a no-training persistence rule. This paper presents a cross-market baseline-first audit of absolute stock-price level forecasting. The study evaluates 165 dataset-series memberships, corresponding to 133 unique ticker symbols after cross-index overlaps, from U.S., Hong Kong, and global ETF universes over 2015 to 2026, two price modes, three horizons, and matched chronological train/validation/test splits. The audited models include LSTM, GRU, DLinear, scaled-down PatchTST-style, iTransformer-style, and TimeMixer-style supervised implementations, plus Chronos-T5-small zero-shot forecasting. Other foundation models are discussed but not experimentally evaluated. The primary usefulness gate is latest-close persistence on the same test origins. Across 35,640 supervised neural configuration-seed rows, only 23 beat latest-close persistence. Chronos-T5-small has 133 passes among 990 sampled-origin rows, but direct pass-count comparison is protocol-confounded and its median RMSE ratio remains above persistence at 1.035. The evidence supports a negative but bounded conclusion: for absolute stock-price level regression, compact learned forecasters and one small foundation model should be treated with caution and should not be claimed useful without first clearing a persistence gate. The paper contributes a reproducible baseline-first audit protocol and shows how positive model-comparison claims can disappear once persistence is treated as the primary benchmark rather than an afterthought.
+This study compares selected neural and zero-shot time-series models with latest-close persistence for stock-price forecasting across markets. This simple baseline uses the latest observed closing price to predict future price levels. Daily data from 2015 to April 2026 cover stocks in the United States (US) and Hong Kong and a global exchange-traded fund (ETF) basket. The five lists contain 165 asset entries and 133 unique tickers. The experiments cover two price modes and three forecast horizons, with each model and its baseline sharing the same test origins and target dates. The supervised implementations include long short-term memory (LSTM), gated recurrent unit (GRU), a linear temporal proxy, and compact PatchTST-style, iTransformer-style, and TimeMixer-style models. Only 39 of 35,640 supervised configuration--seed rows achieve lower root mean squared error (RMSE) than persistence, and every implementation has a median RMSE ratio above one. Chronos-T5-small passes in 119 of 990 sampled-origin rows, with a median ratio of 1.036. Its different protocol prevents a direct ranking against the supervised models. These descriptive results support a bounded conclusion: most selected configurations do not improve on persistence for absolute price-level prediction under the tested protocols. The study provides a baseline-first evaluation with dated forecasts and explicit limits on cross-model comparisons.
 \end{abstract}
 
 \noindent\textbf{Keywords:} stock forecasting; persistence baseline; time-series foundation models; Chronos; PatchTST; iTransformer; TimeMixer; negative results
@@ -35,6 +43,7 @@ Supervised neural and zero-shot time-series forecasting models are increasingly 
 \input{sections/07_reproducibility_materials}
 \input{sections/08_data_and_code_availability}
 \input{sections/09_conclusion}
+\FloatBarrier
 \input{sections/10_references}
 
 \end{document}

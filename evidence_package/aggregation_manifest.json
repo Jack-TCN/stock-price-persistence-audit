@@ -1,0 +1,24 @@
+{
+  "scope": "Public corrected evidence; only local path fields relocated and CSV double precision re-serialized",
+  "supervised_rows": 35640,
+  "sampled_chronos_rows": 990,
+  "full_subset_rows": 60,
+  "outputs": {
+    "best_100_model_rows.csv": "fc3ba8bf32aae1c175d74f930c865758daa3260937b1297acf30c6edb4db89c0",
+    "chronos_full_origin_subset_60_rows.csv": "4c287d72432aff0a68230dec67e46ce51993bfeb28384bb6eabc3b93851333d5",
+    "combined_model_results.csv": "da19cf572fd499ac78d4c04b6cde1713f4b877866f205d7da7cb339c23f9f067",
+    "dataset_coverage.csv": "3555d70e48e9ff3e08bc68f4d7837d3c7b672036128fee45c1b3634c91ccde38",
+    "dataset_model_summary.csv": "a073100785ac49e3609acd3d91d97ccc598f8abeb9e1bf5ff7d8777f28eaa8be",
+    "full_origin_model_gate_summary.csv": "ff52c7843838785c1c9bcd109a591fa7c774570d9c5b6945cdb27e7b9272de1e",
+    "full_origin_subset_by_dataset.csv": "5301ad0fa8c6298cb44572b03a983ba9ac41f75c37aead738c57253fe035a1b3",
+    "full_origin_subset_by_horizon.csv": "5ad55fd830bfb6d82418ff14a07af00f919748118b5d2e1ede4d190f9c472832",
+    "model_gate_summary.csv": "e08704301aa029907f2cd5394bc0ca8a56a8932b44f78af76ef80771c0c0ab0b",
+    "model_horizon_summary.csv": "ef92ddc97521185290dda29225258ab9fcc18bf66ae2238786a0d89465a04823",
+    "protocol_model_summary.csv": "e08704301aa029907f2cd5394bc0ca8a56a8932b44f78af76ef80771c0c0ab0b",
+    "split_boundary_exact.csv": "cb47564036fa2d27880bc9e0910d384b9b5af6de42e9edff62b7a9486e81e38a",
+    "split_boundary_summary.csv": "d5ec067183a20cbf7a43e49a4481b1692b6164cb6937b5bbfacd1df9667037ad",
+    "worst_100_model_rows.csv": "be7bb4b2310029df54d47fb7441a9a54445eede2d9ce937675d9149b18679982"
+  },
+  "inference": "Descriptive only; no row-independent confidence interval or p-value",
+  "raw_result_provenance": "runs/<run>/original_verification.json retains the original result digest; runs/<run>/model_results.csv or chronos_zero_shot_results.csv preserve original raw result bytes"
+}

@@ -1,24 +1,48 @@
 \section{Results}
 
-\begin{figure}[t]
+The corrected results compare each model with persistence on the same forecast origins and target dates. Table~\ref{tab:model_gate_summary} summarizes the RMSE gate and the separate all-three criterion. Table~\ref{tab:horizon_summary} reports horizon-specific medians. We discuss supervised and zero-shot results separately because their inputs and test-origin protocols differ.
+
+\input{tables/crossmarket_core_tables}
+
+\subsection{Supervised results}
+
+Only 39 of 35,640 supervised configuration--seed rows pass the RMSE gate, a rate of 0.11\%. LSTM contributes six wins, GRU 21, the linear temporal proxy none, PatchTST-style two, iTransformer-style three, and TimeMixer-style seven. Twenty rows improve all three error measures. Every supervised implementation has a median RMSE ratio above one, ranging from 1.92 for GRU to 3.53 for iTransformer-style. Under this protocol, persistence therefore has lower error than most of the selected learned configurations.
+
+The horizon summaries also show median ratios above one for every supervised implementation at 1, 5, and 10 days. None of the supervised rows passes at one day, while nine pass at five days and 30 at ten days. The 39 winning rows involve nine unique tickers and 29 distinct list--asset--price--horizon--feature--implementation conditions before seeds. Only one such condition passes with all three seeds: GRU on adjusted TLT prices, a ten-day horizon, and OHLCV inputs. These counts describe local results in the fixed grid rather than independent evidence of a general forecasting advantage.
+
+\subsection{Chronos results}
+
+Chronos-T5-small passes in 119 of 990 sampled-origin rows, or 12.02\%, and improves all three errors in 67 rows. Its median RMSE ratio is 1.036, so the median row remains slightly worse than persistence. Individual wins occur in several asset lists. The nominal win rate does not rank Chronos against the supervised models, because the contexts, variables, and forecast origins differ. Figure~\ref{fig:rmse_ratio_distribution} shows the descriptive distributions on separate scales.
+
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\textwidth]{figures/Figure1_RMSE_Ratio_Distribution.eps}
-\caption{Distribution of RMSE ratios relative to latest-close persistence. Values below the dashed line beat persistence; values above it underperform. The supervised compact implementations are evaluated with full rolling-origin tests, while Chronos-T5-small uses the sampled-origin zero-shot protocol. Extreme ratios above 20 are clipped only for visualization.}
+\includegraphics[width=0.98\linewidth]{figures/corrected_rmse_distribution_20261112.pdf}
+\caption{RMSE ratios relative to persistence.}
 \label{fig:rmse_ratio_distribution}
+\par\smallskip\parbox{0.97\linewidth}{\footnotesize The vertical dashed line marks equality. Panel (a) uses a logarithmic axis and all 35,640 supervised rows. Panel (b) uses a linear axis and separates the 990 sampled-origin Chronos rows from the 60 full-origin subset rows. Boxes show quartiles, the line shows the median, whiskers extend to 1.5 interquartile ranges, and dots show outliers. All ratios remain visible. The protocols differ and rows are dependent.}
 \end{figure}
 
-\subsection{Supervised Models Rarely Pass}
+The full-origin Chronos subset has one RMSE win among 60 rows and one all-three win. Its median ratio is 1.032, also above one. This subset contains the first two asset entries from each list, representing nine unique tickers. It provides a limited sensitivity check rather than a representative test of every asset. Separate generation in the two runs also prevents us from attributing their differences only to origin sampling.
 
-Table~\ref{tab:model_gate_summary} and Fig.~\ref{fig:rmse_ratio_distribution} show the central result. Across 35,640 supervised neural rows, only 23 pass the persistence gate. LSTM passes 8 of 5,940 rows, GRU passes 5, DLinear passes none, and the three scaled-down modern implementations pass only 10 rows combined. The median RMSE ratios are all far above 1.0, ranging from 2.221 for GRU to 3.766 for PatchTST-style. These are not small losses to persistence; they are systematic underperformance relative to a no-training baseline under this absolute-price protocol.
+\subsection{Patterns across lists}
 
-The horizon breakdown in Table~\ref{tab:horizon_summary} shows that longer horizons are somewhat easier, but the conclusion does not change. All supervised model groups have median RMSE ratios above 1.0 at 1-day, 5-day, and 10-day horizons. The 1-day case is especially severe because latest-close persistence is nearly aligned with the target.
-
-\subsection{Chronos Has Local Wins But Not a Stable Advantage}
-
-Chronos-T5-small is meaningfully different from the supervised models. It passes 133 of 990 sampled-origin rows. The nominal pass rate of 13.4\% exceeds that of the supervised models, but direct row-count comparisons are confounded because Chronos was evaluated on a sparse sampled-origin protocol rather than the full rolling-origin protocol used for the supervised models. Therefore, the more reliable aggregate statistic is the median RMSE ratio, which remains above 1.0. Its best cases include individual ETFs, U.S. stocks, and Hang Seng stocks where RMSE ratios fall below 0.95. This suggests that zero-shot foundation forecasters can sometimes improve on latest-close persistence.
-
-However, the aggregate result remains negative. Chronos has median RMSE ratio 1.035 with a bootstrap 95\% confidence interval of [1.033, 1.037]. The one-sided Wilcoxon test strongly rejects equality in the direction of ratios above 1.0. Because the sampled origins may yield less stable tail estimates, the observed pass count should be interpreted as evidence that zero-shot forecasting can occasionally surpass persistence, not as evidence that Chronos-T5-small consistently outperforms the latest close. To verify that sparse origin sampling does not drive this interpretation, we also ran a full-origin Chronos subset covering two assets per dataset, both price modes, and all three horizons. In that 60-row verification, Chronos passed only 2 rows and had a median RMSE ratio of 1.028, consistent with the main sampled-origin conclusion.
-
-\subsection{Cross-Market Pattern}
-
-The underperformance is not confined to a single asset list. Supervised models fail to clear the persistence gate across U.S. large-cap equities, technology-heavy equities, Hong Kong large caps, and ETFs. Hang Seng assets produce more of the rare supervised passes, and ETFs produce the highest Chronos pass rate, but no dataset reverses the overall conclusion. The audit therefore supports a bounded cross-market claim: for price-level forecasting, compact learned forecasters and Chronos-T5-small do not automatically translate model sophistication into out-of-sample improvement over latest-close persistence.
+Table~\ref{tab:market_gate} separates gate counts by asset list and protocol. Every supervised implementation has a median RMSE ratio above one within each list, although some configurations win. The frequency of local wins varies across lists. These summaries retain list memberships, so a stock that appears in several lists contributes several times. The pattern supports a bounded cross-market result for this selected universe, not a claim that every configuration or every financial forecasting model fails.
+\begin{table}[htbp]
+\centering
+\caption{Gate counts by asset list.}
+\label{tab:market_gate}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule
+List & Sup. wins & Sup. rows & Chronos wins & Chronos rows & Chronos rate (\%) \\
+\midrule
+Dow 30 & 9 & 6,480 & 13 & 180 & 7.22 \\
+ETF basket & 5 & 2,592 & 12 & 72 & 16.67 \\
+Hang Seng large-cap & 16 & 9,288 & 41 & 258 & 15.89 \\
+Nasdaq large-tech & 0 & 6,480 & 14 & 180 & 7.78 \\
+S\&P 100 subset & 9 & 10,800 & 39 & 300 & 13.00 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\parbox{0.97\linewidth}{\footnotesize Sup. denotes supervised; the Chronos columns use sampled origins. Each column summarizes its own protocol; differences in rates do not establish a model-family ranking.}
+\end{table}

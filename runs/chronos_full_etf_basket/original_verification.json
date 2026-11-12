@@ -1,0 +1,62 @@
+{
+  "run_dir": "runs\\chronos_full_etf_basket",
+  "rows": 12,
+  "expected_rows": 12,
+  "complete": true,
+  "result_sha256": "5b62e0e3a619974db3c605e038e07d71c3a3597b8fecc4f47e0b1c8736dc9499",
+  "manifest_sha256": "ec3330d039da175ff5a8ec6b49efb470a8e87306e27165d1c5cac0b7870782cc",
+  "verifier_sha256": "db7e81c90ebeab5e8fe1d8e275f151df5a2fc52829b8d76ab5da60d1c46bd3c3",
+  "declared_origin_selection_verified": true,
+  "traces": [
+    {
+      "key": "etf_basket_SPY_raw_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "7ab10e63b25aa28acb5279bea36c4361a4863e741d294b96e87a59cee41e26a9"
+    },
+    {
+      "key": "etf_basket_SPY_raw_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "17dd2c0b029969320b709634073934dd2e22f8439893dc40b6bb57bca9938969"
+    },
+    {
+      "key": "etf_basket_SPY_raw_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "52bce538518692c005b3fda8c5e7bab3680c6d543f1ae4c54c1e205aabe55962"
+    },
+    {
+      "key": "etf_basket_SPY_adjusted_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "5f55c92b7583c9ede5d2693354c8dbe7767ee5df7bbee32d45c8f260f4e4ab56"
+    },
+    {
+      "key": "etf_basket_SPY_adjusted_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "11d68bb3bd5e33382d06af9c9e24ef37c07573dea49ddfa1d04c7f7e78bb315e"
+    },
+    {
+      "key": "etf_basket_SPY_adjusted_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "9a2d416b3dc605313b3842561a2de5dd990d4c9f3be49a2dfb100f5a171ce3bf"
+    },
+    {
+      "key": "etf_basket_QQQ_raw_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "5ccd8b0e03a08b68db444b8cdf44005f28963218af9c22f1239622ef3185ec27"
+    },
+    {
+      "key": "etf_basket_QQQ_raw_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "e4c046cfde8a258aa3f3768dd0f6accab51de0726c527e05e2f44d1efd20fcb0"
+    },
+    {
+      "key": "etf_basket_QQQ_raw_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "76166d9b26ffd63ab59e0841594e26a5d84f02f49b6d92e2c2bacfb3c6ad123a"
+    },
+    {
+      "key": "etf_basket_QQQ_adjusted_close_1_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "9f6158950d0c1da390f9035ce0e024acb5ff987d7a9eaffd903cedcd1ab95a35"
+    },
+    {
+      "key": "etf_basket_QQQ_adjusted_close_5_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "e79d120e2a533a6c796442620adeb6d762fb929118c4d34d849fe35c744fab76"
+    },
+    {
+      "key": "etf_basket_QQQ_adjusted_close_10_chronos-t5-small-full-origin-subset_amazon/chronos-t5-small_10000",
+      "prediction_sha256": "4fdeca40ba71479da4484433b10d8ff4ed15ddf26636f6af6e23784a7cb043da"
+    }
+  ],
+  "boundary": "Saved prediction arithmetic, declared origin selection and input provenance; not independent training reproduction or statistical inference",
+  "publication_note": "This is the historical verification report. Its manifest SHA identifies the unredacted local original, not the public path-redacted copy. Use verify_results.py for a new public forecast-only report."
+}
